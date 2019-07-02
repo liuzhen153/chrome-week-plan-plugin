@@ -1,0 +1,138 @@
+.search-input {
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 62px;
+    box-sizing: border-box;
+    width: 100%;
+    height: 62px;
+    padding-right: 20px;
+    padding-left: 20px;
+    color: #555;
+    border: none;
+    border-radius: 40px;
+    outline: 0;
+    background-color: #fff;
+    box-shadow: 2px 2px 20px rgba(0, 0, 0, .06);
+}
+
+.search-tab-item {
+    height: 80px;
+}
+
+/*    body{
+        background-image: url("https://wallpaper.infinitynewtab.com/wallpaper/2710.jpg");
+        background-size: 100vw 100vh;
+        background-repeat:no-repeat;
+    }*/
+.bg {
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    transform: translate3d(0, 0, 0);
+    background-position: center;
+    background-size: cover;
+}
+
+.BGBLUR {
+    -webkit-filter: blur(0px);
+    filter: blur(0px);
+    -webkit-transform: scale(1);
+    transform: scale(1);
+}
+
+.layui-container {
+    margin: 0;
+    padding: 0;
+}
+
+.big-stone {
+    /*background: #f2f2f2;*/
+    padding: 10px;
+    height: 200px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.normal-tools {
+    /*background: #f2f2f2;*/
+    padding: 10px;
+    height: 200px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.layui-card {
+    margin-bottom: 5px;
+}
+
+.layui-card-header {
+    color: #009688;
+}
+
+.week-plan {
+    padding: 10px;
+    position: relative;
+    /*color: #009688;*/
+}
+
+.week-table {
+    margin: 0;
+    /*position: absolute;*/
+    /*left: 80px*/
+
+}
+
+.week-time {
+    position: absolute;
+    bottom: -8px;
+    z-index: 999;
+}
+
+.no-border-top {
+    border-top: none;
+}
+
+.td-i {
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 0;
+    cursor: pointer;
+}
+
+.add-edit {
+    width: 0;
+    height: 100%;
+    background: #5FB878;
+    opacity: 0.7;
+    position: absolute;
+    top: 0;
+    left: 0;
+    /*display: hidden;*/
+}
+
+.layui-icon {
+    font-size: 18px;
+}
+
+/*    .tools-box:nth-child(odd) {
+        border-right: solid 1px;
+    }*/
+
+.tools-title {
+    text-align: center;
+}
+
+.is-big-stone {
+    background: #5FB878;
+    color: #fff;
+}
+
+.layui-row {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 10px;
+
+}

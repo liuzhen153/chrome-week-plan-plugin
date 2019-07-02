@@ -1,0 +1,49 @@
+<div class="layui-tab layui-tab-brief" lay-filter="planTabBrief">
+  <ul class="layui-tab-title">
+    <li class="layui-this">计划列表</li>
+    <li>新增计划</li>
+  </ul>
+  <div class="layui-tab-content">
+	<div class="layui-tab-item layui-show">
+          <div class="layui-collapse" lay-accordion>
+		  <div class="layui-colla-item">
+		    <h2 class="layui-colla-title">杜甫</h2>
+		    <div class="layui-colla-content layui-show">内容区域</div>
+		  </div>
+		  <div class="layui-colla-item">
+		    <h2 class="layui-colla-title">李清照</h2>
+		    <div class="layui-colla-content">内容区域</div>
+		  </div>
+		  <div class="layui-colla-item">
+		    <h2 class="layui-colla-title">鲁迅</h2>
+		    <div class="layui-colla-content">内容区域</div>
+		  </div>
+		</div>                  
+    </div>
+    <div class="layui-tab-item">
+          <div class="layui-form" action="">
+		  <div class="layui-form-item">
+		    <label class="layui-form-label">简要名称</label>
+		    <div class="layui-input-block">
+		      <input type="text" name="title" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+		    </div>
+		  </div>
+		  <div class="layui-form-item layui-form-text">
+		    <label class="layui-form-label">详细内容</label>
+		    <div class="layui-input-block">
+		      <textarea name="desc" placeholder="请输入内容" class="layui-textarea"></textarea>
+		    </div>
+		  </div>
+		  <div class="layui-form-item">
+		    <div class="layui-input-block">
+		      <button class="layui-btn" lay-submit lay-filter="addPlan">立即提交</button>
+		      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+		    </div>
+		  </div>
+		</div>                  
+    </div>
+  </div>
+  <div class="layui-tab-content"></div>
+</div>  
+
+

@@ -21,3 +21,19 @@
 
 ### 添加计划
 ![示意](https://github.com/liuzhen153/chrome-week-plan-plugin/blob/master/img/addplan.png)
+
+
+### 桌面通知
+![示意](https://github.com/liuzhen153/chrome-week-plan-plugin/blob/master/img/alert.png)
+
+![示意](https://github.com/liuzhen153/chrome-week-plan-plugin/blob/master/img/alert1.png)
+
+
+# TODO
+
+* 切换背景图
+* 常用标签页功能
+* 计划的修改和删除
+* 支持多周
+* 支持每周回顾
+* 支持生成报告

@@ -12,4 +12,12 @@
 
 # 效果示意
 
+### 整体效果
 ![示意](https://github.com/liuzhen153/chrome-week-plan-plugin/blob/master/img/screen.png)
+
+### 象限分布
+![示意](https://github.com/liuzhen153/chrome-week-plan-plugin/blob/master/img/xiangxian.png)
+
+
+### 添加计划
+![示意](https://github.com/liuzhen153/chrome-week-plan-plugin/blob/master/img/addplan.png)

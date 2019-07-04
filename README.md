@@ -16,7 +16,7 @@
 ![示意](https://github.com/liuzhen153/chrome-week-plan-plugin/blob/master/img/screen.png)
 
 ### 象限分布
-![示意](https://github.com/liuzhen153/chrome-week-plan-plugin/blob/master/img/xiangxian.png)
+![示意](https://github.com/liuzhen153/chrome-week-plan-plugin/blob/master/img/q4.png)
 
 
 ### 添加计划

@@ -51,7 +51,7 @@
 .big-stone {
     /*background: #f2f2f2;*/
     padding: 10px;
-    height: 200px;
+    height: 150px;
     overflow-x: hidden;
     overflow-y: auto;
 }
@@ -59,7 +59,7 @@
 .normal-tools {
     /*background: #f2f2f2;*/
     padding: 10px;
-    height: 200px;
+    height: 150px;
     overflow-x: hidden;
     overflow-y: auto;
 }
@@ -135,4 +135,97 @@
     background: rgba(255, 255, 255, 0.95);
     border-radius: 10px;
 
+}
+
+.radio-normal {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.layui-input-block {
+    line-height: 36px;
+}
+
+.time-q-t{
+    /*width: 30px;*/
+    height: 30px;
+    
+    
+    line-height: 30px;
+    font-size: 20px;
+    position: absolute;
+    text-align: center;
+    /*border-radius: 50%;*/
+}
+.time-q-t span{
+
+    font-size: small;
+}
+.time-q-1 {
+    color: #009688;
+    bottom: 10px;
+    right: 10px;
+}
+
+.time-q-2 {
+    background: #009688;
+    color: #fff;
+    bottom: 10px;
+    left: 10px;
+}
+
+.time-q-3 {
+    color: #009688;
+    top: 10px;
+    right: 10px;
+}
+
+.time-q-4 {
+    color: #009688;
+    top: 10px;
+    left: 10px;
+}
+.time_q_badge{
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+}
+
+.time-q-2-d{
+    width: 100%;
+    height: 105%;
+    background: #009688;
+    position: absolute;
+    left: 5px;
+    bottom: 5px;
+    color: #fff;
+    padding: 10px 0px 0 10px;
+}
+
+.time-q-1-d{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+    padding: 10px 0 0 10px;
+}
+.time-q-3-d{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    padding: 40px 0 0 10px;
+}
+.time-q-4-d{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    padding: 40px 0 0 10px;
+}
+*::-webkit-scrollbar {
+    display: none;
 }

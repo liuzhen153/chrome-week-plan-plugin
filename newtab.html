@@ -10,30 +10,53 @@
 </head>
 
 <body>
-    <div id="bg" class="bg BGBLUR" style="background-image: url(&quot;https://wallpaper.infinitynewtab.com/wallpaper/2710.jpg&quot;);"></div>
+    <!-- <div id="bg" class="bg BGBLUR" style="background-image: url(&quot;https://wallpaper.infinitynewtab.com/wallpaper/2710.jpg&quot;);"></div> -->
     <div class="layui-container" style="padding: 2vh 2vw;">
         <div class="layui-row" style="width: 96vw;">
             <div class="layui-col-md3 layui-col-lg3 normal-tools">
-                <button type="button" class="layui-btn layui-btn-fluid" id="add_stone">常用工具<i class="layui-icon layui-icon-face-smile" style="display: inline-block;margin-left: 10px;"></i> </button>
-                <div class="layui-card">
-                    <div class="layui-row">
-                        <div class="layui-col-xs6">
-                            <div class="layui-card-header tools-title" id="done_all" style="cursor: pointer;">全部完成</div>
-                        </div>
-                        <div class="layui-col-xs6">
-                            <div class="layui-card-header tools-title" id="open_all" style="cursor: pointer;">全部开启</div>
-                        </div>
-                        <div class="layui-col-xs6  tools-box">
-                            <div class="layui-card-header tools-title" id="refresh">重置所有</div>
-                        </div>
-                        <div class="layui-col-xs6">
-                            <div class="layui-card-header tools-title" id="export" style="cursor: pointer;">导出计划</div>
-                        </div>
-                        <div class="layui-col-xs12">
-                            <div class="layui-card-header tools-title" id="visit_code" style="cursor: pointer;">访问代码库</div>
+                <div class="layui-tab layui-tab-brief" lay-filter="control" style="margin:0;">
+                  <ul class="layui-tab-title">
+                    <li class="layui-this">常用功能</li>
+                    <li>其他功能</li>
+                  </ul>
+                  <div class="layui-tab-content" style="padding: 0;">
+                    <div class="layui-tab-item layui-show">
+                        <div class="layui-card">
+                            <div class="layui-row">
+                                <div class="layui-col-xs6">
+                                    <div class="layui-card-header tools-title" id="control_alert" style="cursor: pointer;"><span id="alert_text"></span>通知</div>
+                                </div>
+                                <div class="layui-col-xs6">
+                                    <div class="layui-card-header tools-title" id="v_time_q" style="cursor: pointer;">象限分布</div>
+                                </div>
+                                <div class="layui-col-xs6">
+                                    <div class="layui-card-header tools-title" id="done_all" style="cursor: pointer;">全部完成</div>
+                                </div>
+                                <div class="layui-col-xs6">
+                                    <div class="layui-card-header tools-title" id="open_all" style="cursor: pointer;">全部开启</div>
+                                </div>
+                               
+                            </div>
                         </div>
                     </div>
+                    <div class="layui-tab-item">
+                        <div class="layui-card">
+                            <div class="layui-row">
+                                <div class="layui-col-xs6  tools-box">
+                                    <div class="layui-card-header tools-title" id="refresh">重置所有</div>
+                                </div>
+                                 <div class="layui-col-xs6">
+                                    <div class="layui-card-header tools-title" id="v_todo_list" style="cursor: pointer;">TODO List</div>
+                                </div>
+                                <div class="layui-col-xs6">
+                                    <div class="layui-card-header tools-title" id="export" style="cursor: pointer;">导出计划</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
                 </div>
+                
             </div>
             
             <div class="layui-col-md6 layui-col-lg6">
@@ -45,7 +68,7 @@
                     <div class="layui-tab-content">
                         <div class="layui-tab-item layui-show search-tab-item">
                             <form class="search-form" action="http://www.baidu.com/baidu" target="_blank">
-                                <input class="search-input" type=text name=word size=30 placeholder="输入并使用百度搜索...">
+                                <input class="search-input" type=text name=word size=30 placeholder="输入并使用百度搜索..." autofocus="">
                             </form>
                         </div>
                         <div class="layui-tab-item search-tab-item">
@@ -87,6 +110,7 @@
                     </tbody>
                 </table>
             </div>
+
         </div>
     </div>
 

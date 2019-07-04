@@ -41,7 +41,7 @@ $(function() {
         date_plan[date_list[4]] = []
         date_plan[date_list[5]] = []
         date_plan[date_list[6]] = []
-        var planData = {
+        var _planData = {
             'time_100': {
                 date_time: '上午 5:00~6:00',
                 time: '6',
@@ -147,16 +147,11 @@ $(function() {
             console.log(items.planData)
             if (items.planData == {}) {
                 // 模拟数据
-                chrome.storage.sync.set({ planData: planData }, function() {
-                    console.log('保存成功')
-                });
+                edit_planData(_planData)
             }
         });
 
-
-
-
-
+        // 数据修改后需要刷新数据
         function refresh() {
             console.log('数据刷新中...')
             // 展示plan
@@ -231,9 +226,11 @@ $(function() {
             });
         }
 
+        // 先刷新一遍数据
         refresh()
 
-        document.f.q.focus();
+        // document.f.q.focus();
+
 
         var bigStoneAlert, _alert_index
 
@@ -247,28 +244,7 @@ $(function() {
 
             // 展示plan
             chrome.storage.sync.get({ planData: {} }, function(items) {
-                var _plan
-                var _html = ''
-                var _html_close = ''
                 var planData = items.planData
-                _plan = planData[data_plan]['date_plan'][data_plan_week]
-                var _count = 0,
-                    _count_close = 0
-                $.each(_plan, function(index, value) {
-                    if (value.open == 1) {
-                        _count++
-                        _html += '<div class="layui-card" data-plan="' + data_plan + '" data-index="' + index + '" data-parent-index="' + data_plan_week
-                        _html += '">	<div class="layui-card-header" style="color:#01AAED;font-weight:bold;">'
-                        _html += '<i class="plan-check layui-icon layui-icon-circle" style="color: #FF5722;"></i> '
-                        _html += value.title + '</div>	<div class="layui-card-body">		' + value.desc + '</div></div>'
-                    } else {
-                        _count_close++
-                        _html_close += '<div class="layui-card" data-plan="' + data_plan + '" data-index="' + index + '" data-parent-index="' + data_plan_week
-                        _html_close += '">	<div class="layui-card-header" style="color:#01AAED;font-weight:bold;">'
-                        _html_close += '<i class="plan-check layui-icon layui-icon-ok-circle" style="color: #FF5722;"></i>	'
-                        _html_close += value.title + '</div>	<div class="layui-card-body">		' + value.desc + '</div></div>'
-                    }
-                })
                 // 弹窗
                 plan_alert(planData,data_plan,data_plan_week,_title)
                 
@@ -297,7 +273,7 @@ $(function() {
                     var planData = items.planData
                     planData[data_plan]['date_plan'][data_plan_week][data_plan_index]['open'] = 0
                     // 修改状态
-                    edit_open(planData,data_plan,data_plan_week)
+                    edit_planData(planData)
 
                     // 弹窗
                     plan_alert(planData,data_plan,data_plan_week,_title)
@@ -318,7 +294,7 @@ $(function() {
                     planData[data_plan]['date_plan'][data_plan_week][data_plan_index]['open'] = 1
                     
                     // 修改状态
-                    edit_open(planData,data_plan,data_plan_week)
+                    edit_planData(planData)
                     // 弹窗
                     plan_alert(planData,data_plan,data_plan_week,_title)
                     refresh()
@@ -333,8 +309,12 @@ $(function() {
         form.on('submit(addPlan)', function(data) {
             console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
             _data = data.field
-            console.log(_data)
-            item = { title: _data['title'], desc: _data['desc'], open: 1, big_stone: _data['big_stone'] }
+            // console.log(_data)
+            // time_q = 1
+            // if (_data.hasOwnProperty('time_q')) {
+            //     time_q = _data['time_q']
+            // }
+            item = { title: _data['title'], desc: _data['desc'], open: 1, big_stone: _data['big_stone'], time_q: _data['time_q'] }
             console.log(item)
             // _this = $(this)
             // // 修改plan
@@ -357,30 +337,10 @@ $(function() {
         });
 
         // 修改计划状态
-        function edit_open(planData,data_plan,data_plan_week){
+        function edit_planData(planData){
         	chrome.storage.sync.set({ planData: planData }, function() {
                 console.log('修改成功')
             });
-        	_plan = planData[data_plan]['date_plan'][data_plan_week]
-            var _html = '',
-                _html_close = ''
-            var _count = 0,
-                _count_close = 0
-            $.each(_plan, function(index, value) {
-                if (value.open == 1) {
-                    _count++
-                    _html += '<div class="layui-card" data-plan="' + data_plan + '" data-index="' + index + '" data-parent-index="' + data_plan_week
-                    _html += '">	<div class="layui-card-header" style="color:#01AAED;font-weight:bold;">'
-                    _html += '<i class="plan-check layui-icon layui-icon-circle" style="color: #FF5722;"></i> '
-                    _html += value.title + '</div>	<div class="layui-card-body">		' + value.desc + '</div></div>'
-                } else {
-                    _count_close++
-                    _html_close += '<div class="layui-card" data-plan="' + data_plan + '" data-index="' + index + '" data-parent-index="' + data_plan_week
-                    _html_close += '">	<div class="layui-card-header" style="color:#01AAED;font-weight:bold;">'
-                    _html_close += '<i class="plan-check layui-icon layui-icon-ok-circle" style="color: #FF5722;"></i>	'
-                    _html_close += value.title + '</div>	<div class="layui-card-body">		' + value.desc + '</div></div>'
-                }
-            })
         }
 
 
@@ -392,25 +352,31 @@ $(function() {
             var _count = 0,
                 _count_close = 0
             $.each(_plan, function(index, value) {
+                _html += '<div class="layui-card" data-alert-title="' + _title + '" data-plan="' + data_plan + '" data-index="' + index + '" data-parent-index="' + data_plan_week
+                _html += '">    <div class="layui-card-header" style="color:#01AAED;font-weight:bold;cursor:pointer;" title="改变计划状态">'
+                
                 if (value.open == 1) {
                     _count++
-                    _html += '<div class="layui-card" data-alert-title="' + _title + '" data-plan="' + data_plan + '" data-index="' + index + '" data-parent-index="' + data_plan_week
-                    _html += '">	<div class="layui-card-header" style="color:#01AAED;font-weight:bold;">'
-                    _html += '<i class="plan-check layui-icon layui-icon-circle" style="color: #FF5722;"></i> '
-                    _html += value.title + '</div>	<div class="layui-card-body">		' + value.desc + '</div></div>'
+                    _html += '<i class="plan-check layui-icon layui-icon-circle" style="font-size:20px;color: #FF5722;cursor:pointer;"></i> '
+                    
                 } else {
                     _count_close++
-                    _html_close += '<div class="layui-card" data-alert-title="' + _title + '" data-plan="' + data_plan + '" data-index="' + index + '" data-parent-index="' + data_plan_week
-                    _html_close += '">	<div class="layui-card-header" style="color:#01AAED;font-weight:bold;">'
-                    _html_close += '<i class="plan-check layui-icon layui-icon-ok-circle" style="color: #FF5722;"></i>	'
-                    _html_close += value.title + '</div>	<div class="layui-card-body">		' + value.desc + '</div></div>'
+                    // _html_close += '<div class="layui-card" data-alert-title="' + _title + '" data-plan="' + data_plan + '" data-index="' + index + '" data-parent-index="' + data_plan_week
+                    // _html_close += '">	<div class="layui-card-header" style="color:#01AAED;font-weight:bold;">'
+                    _html += '<i class="plan-check layui-icon layui-icon-ok-circle" style="font-size:20px;color: #FF5722;cursor:pointer;"></i>	'
+                    // _html_close += value.title + '</div>	<div class="layui-card-body">		' + value.desc + '</div></div>'
                 }
+                _html += value.title + '</div>  '
+                if (value.desc != '') {
+                    _html += '<div class="layui-card-body">       ' + value.desc + '</div>'
+                }
+                _html += '</div>'
             })
 
         	_alert_index = layer.open({
-                area: ['600px', '400px'],
+                area: ['600px', '600px'],
                 title: _title,
-                content: '<div class="layui-tab layui-tab-brief" lay-filter="planTabBrief"><ul class="layui-tab-title"><li class="layui-this">待完成 ' + _count + '</li><li>已完成 ' + _count_close + '</li><li>新增计划</li></ul><div class="layui-tab-content"><div class="layui-tab-item layui-show"> ' + _html + '</div><div class="layui-tab-item"> ' + _html_close + '</div><div class="layui-tab-item"><div class="layui-form" action=""><div class="layui-form-item"><label class="layui-form-label">简要名称</label><div class="layui-input-block"><input type="text" name="title" required lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input"></div></div><div class="layui-form-item">			<label class="layui-form-label">大石头</label>			<div class="layui-input-block">			<input type="radio" name="big_stone" value="1" style="display:inline-block;"> 是			<input type="radio" name="big_stone" value="0" style="display:inline-block;" checked> 否			</div>			<input type="hidden" name="data_plan_week" value="' + data_plan_week + '" />			<input type="hidden" name="data_plan" value="' + data_plan + '" />	<input type="hidden" name="_title" value="' + _title + '" />			</div><div class="layui-form-item layui-form-text"><label class="layui-form-label">详细内容</label><div class="layui-input-block"><textarea name="desc" placeholder="请输入内容" class="layui-textarea"></textarea></div></div><div class="layui-form-item"><div class="layui-input-block"><button class="layui-btn" lay-submit lay-filter="addPlan">立即提交</button><button type="reset" class="layui-btn layui-btn-primary">重置</button></div></div></div></div></div></div>',
+                content: '<div class="layui-tab layui-tab-brief" style="margin:0;" lay-filter="planTabBrief"><ul class="layui-tab-title"><li class="layui-this" style="cursor:pointer;">计划列表 ' + _count_close + '/' + parseInt(_count + _count_close) + '</li><li style="cursor:pointer;">新增计划</li></ul><div class="layui-tab-content"><div class="layui-tab-item layui-show">            ' + _html + '</div><div class="layui-tab-item"><div class="layui-form" action=""><div class="layui-form-item"><label class="layui-form-label">简要名称</label><div class="layui-input-block"><input type="text" name="title" required="" lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input" /></div></div><div class="layui-form-item"><label class="layui-form-label">大石头</label><div class="layui-input-block"><input class="radio-normal" type="radio" name="big_stone" value="1" style="display:inline-block;" /> 是<input class="radio-normal" type="radio" name="big_stone" value="0" style="display:inline-block;" checked="" /> 否</div><input type="hidden" name="data_plan_week" value="' + data_plan_week + '" /><input type="hidden" name="data_plan" value="' + data_plan + '" /><input type="hidden" name="_title" value="' + _title + '" /></div><div class="layui-form-item"><label class="layui-form-label">所属象限</label><div class="layui-input-block"><input class="radio-normal" type="radio" name="time_q" value="1" style="display:inline-block;" checked /> Q1<input class="radio-normal" type="radio" name="time_q" value="2" style="display:inline-block;"/> Q2<input class="radio-normal" type="radio" name="time_q" value="3" style="display:inline-block;" /> Q3<input class="radio-normal" type="radio" name="time_q" value="4" style="display:inline-block;" /> Q4</div></div><div class="layui-form-item layui-form-text"><label class="layui-form-label">详细内容</label><div class="layui-input-block"><textarea name="desc" placeholder="请输入内容" class="layui-textarea"></textarea></div></div><div class="layui-form-item"><div class="layui-input-block"><button class="layui-btn" lay-submit="" lay-filter="addPlan">立即提交</button></div></div></div></div></div></div>',
                 closeBtn: 0,
                 shadeClose: true,
                 btn: []
@@ -420,9 +386,7 @@ $(function() {
         // 重置所有
         $('#refresh').click(function() {
             // 模拟数据
-            chrome.storage.sync.set({ planData: planData }, function() {
-                console.log('保存成功')
-            });
+            edit_planData(_planData)
             refresh()
         })
 
@@ -441,9 +405,7 @@ $(function() {
                     })
 
                 })
-                chrome.storage.sync.set({ planData: planData }, function() {
-                    layer.msg(msg)
-                });
+                edit_planData(planData)
                 refresh()
 
 
@@ -468,7 +430,131 @@ $(function() {
         $('#visit_code').click(function() {
             window.location.href = 'https://github.com/liuzhen153/chrome-week-plan-plugin'
         })
-        
+
+
+        // 时间象限展示
+        $('#v_time_q').click(function(){
+            chrome.storage.sync.get({ planData: {} }, function(items) {
+                var html_1 = '<ul>'
+                var html_2 = '<ul>'
+                var html_3 = '<ul>'
+                var html_4 = '<ul>'
+                var planData = items.planData
+                $.each(planData, function(index, value) {
+                    $.each(value['date_plan'], function(idx, val){
+                        $.each(val, function(i, v){
+                            var time_q = 1
+                            if (v.hasOwnProperty('time_q')) {
+                                time_q = v['time_q']
+                            }
+
+                            if (v['open'] == 1) {
+                                _li = '<li><span class="layui-badge-dot layui-bg-orange"></span> '
+                            } else {
+                                _li = '<li><span class="layui-badge-dot layui-bg-orange"></span> <del>'
+                            }
+
+
+                            if (time_q == 1) {
+                                html_1 += _li + v['title']
+                            }
+                            if (time_q == 2) {
+                                html_2 += _li + v['title']
+                            }
+                            if (time_q == 3) {
+                                html_3 += _li + v['title']
+                            }
+                            if (time_q == 4) {
+                                html_4 += _li + v['title']
+                            }
+
+                            if (v['open'] == 1) {
+                                _del = ''
+                            } else {
+                                _del = '</del>'
+                            }
+                        })
+                    })
+
+                })
+
+
+                _content = '<table class="layui-table" style="width:460px;height:410px;border:none;"><colgroup><col width="230"><col width="230"></colgroup><thead><tbody><tr style="border:none;border-bottom:1px solid #009688;">'
+                _content += '<td style="border:none;border-right:1px solid #009688;padding:0;"><div class="time-q-1-d">'
+                _content += html_1 + _del + '</div></li></ul>'
+                _content += '<div class="time-q-t time-q-1">Q1 <span>必要之事</span></div></td><td style="border:none;"><div class="time-q-2-d">'
+                _content += html_2 + _del + '</div></li></ul>'
+                _content += '<div class="time-q-t time-q-2">Q2 <span>非凡的效能</span></div></td></tr><tr style="border:none;"><td style="border:none;border-right:1px solid #009688;"><div class="time-q-3-d">'
+                _content += html_3 + _del + '</li></ul>'
+                _content += '</div><div class="time-q-t time-q-3">Q3 <span>分心之事</span></div></td><td style="border:none;"><div class="time-q-4-d">'
+                _content += html_4 + _del + '</li></ul>'
+                _content += '</div><div class="time-q-t time-q-4">Q4 <span>无关紧要之事</span></div></td></tr></tbody></table>'
+
+                v_time_q_index = layer.open({
+                    area: ['500px', '500px'],
+                    title: false,
+                    content: _content,
+                    closeBtn: 0,
+                    shadeClose: true,
+                    btn: []
+                });
+
+            });
+            
+        })
+
+
+
+        // todo list展示
+        $('#v_todo_list').click(function(){
+            layer.msg('敬请期待')
+            // 显示桌面通知
+            // chrome.notifications.create(null, {
+            //     type: 'basic',
+            //     iconUrl: 'img/icon.png',
+            //     title: '这是标题',
+            //     message: '您刚才点击了自定义右键菜单！'
+            // });
+            
+        })
+
+        chrome.storage.sync.get({ allowAlert: 0 }, function(items) {
+            var text = ''
+            var allowAlert = items.allowAlert
+            if (allowAlert == 0) {
+                text = '开启'
+            } else {
+                text = '关闭'
+            }
+            $('#alert_text').html(text)
+        })
+
+
+        // 开关设置
+        $('#control_alert').click(function(){
+            chrome.storage.sync.get({ allowAlert: 0 }, function(items) {
+                var text = ''
+                var allowAlert = items.allowAlert
+                if (allowAlert == 0) {
+                    allowAlert = 1
+                    text = '关闭'
+                } else {
+                    allowAlert = 0
+                    text = '开启'
+                }
+                $('#alert_text').html(text)
+                chrome.storage.sync.set({ allowAlert: allowAlert }, function() {
+                    console.log('修改通知开关成功')
+                });
+            })
+        })
+
+
+
+
+
+
+
     });
 
 

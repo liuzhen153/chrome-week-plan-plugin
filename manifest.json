@@ -15,12 +15,12 @@
         "128": "img/icon.png"
     },
     // 会一直常驻的后台JS或后台页面
-    // "background":
-    // {
-    //     // 2种指定方式，如果指定JS，那么会自动生成一个背景页
-    //     "page": "background.html"
-    //     //"scripts": ["js/background.js"]
-    // },
+    "background":
+    {
+        // 2种指定方式，如果指定JS，那么会自动生成一个背景页
+        "page": "background.html"
+        // "scripts": ["js/background.js"]
+    },
     // 浏览器右上角图标设置，browser_action、page_action、app必须三选一
     "browser_action": 
     {

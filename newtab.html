@@ -11,7 +11,7 @@
 
 <body>
     <!-- <div id="bg" class="bg BGBLUR" style="background-image: url(&quot;https://wallpaper.infinitynewtab.com/wallpaper/2710.jpg&quot;);"></div> -->
-    <div class="layui-container" style="padding: 2vh 2vw;">
+    <div class="layui-container" style="padding: 0 2vw;">
         <div class="layui-row" style="width: 96vw;">
             <div class="layui-col-md3 layui-col-lg3 normal-tools">
                 <div class="layui-tab layui-tab-brief" lay-filter="control" style="margin:0;">
@@ -23,17 +23,24 @@
                     <div class="layui-tab-item layui-show">
                         <div class="layui-card">
                             <div class="layui-row">
-                                <div class="layui-col-xs6">
-                                    <div class="layui-card-header tools-title" id="control_alert" style="cursor: pointer;"><span id="alert_text"></span>通知</div>
-                                </div>
-                                <div class="layui-col-xs6">
+                                
+                                <div class="layui-col-xs4">
                                     <div class="layui-card-header tools-title" id="v_time_q" style="cursor: pointer;">象限分布</div>
                                 </div>
-                                <div class="layui-col-xs6">
-                                    <div class="layui-card-header tools-title" id="done_all" style="cursor: pointer;">全部完成</div>
+                                <div class="layui-col-xs4">
+                                    <div class="layui-card-header tools-title" id="save_this" style="cursor: pointer;">保存本周</div>
                                 </div>
-                                <div class="layui-col-xs6">
-                                    <div class="layui-card-header tools-title" id="open_all" style="cursor: pointer;">全部开启</div>
+                                <div class="layui-col-xs4">
+                                    <div class="layui-card-header tools-title" id="control_alert" style="cursor: pointer;"><span id="alert_text"></span>通知</div>
+                                </div>
+                                <div class="layui-col-xs4  tools-box">
+                                    <div class="layui-card-header tools-title" id="view_list" style="cursor: pointer;">查看历史</div>
+                                </div>
+                                <div class="layui-col-xs4  tools-box">
+                                    <div class="layui-card-header tools-title" id="refresh" style="cursor: pointer;">重置所有</div>
+                                </div>
+                                <div class="layui-col-xs4">
+                                    <div class="layui-card-header tools-title" id="loop_p" style="cursor: pointer;">周期计划</div>
                                 </div>
                                
                             </div>
@@ -42,9 +49,13 @@
                     <div class="layui-tab-item">
                         <div class="layui-card">
                             <div class="layui-row">
-                                <div class="layui-col-xs6  tools-box">
-                                    <div class="layui-card-header tools-title" id="refresh">重置所有</div>
+                                <div class="layui-col-xs6">
+                                    <div class="layui-card-header tools-title" id="done_all" style="cursor: pointer;">全部完成</div>
                                 </div>
+                                <div class="layui-col-xs6">
+                                    <div class="layui-card-header tools-title" id="open_all" style="cursor: pointer;">全部开启</div>
+                                </div>
+                                
                                  <div class="layui-col-xs6">
                                     <div class="layui-card-header tools-title" id="v_todo_list" style="cursor: pointer;">TODO List</div>
                                 </div>
@@ -89,6 +100,11 @@
         </div>
         <div class="layui-row" style="width: 96vw;">
             <div class="layui-col-md12 week-plan">
+                <div class="col-xs-12" id="history-msg" style="color: #FFB800;display: none;">
+                        历史计划：<span id="history_list"></span>  <span id="go_back_this" style="color: #01AAED;cursor: pointer;display: inline-block;margin-left: 20px;">历史展示期间，通知将被屏蔽。返回本周>>></span>
+                        <hr class="layui-bg-orange">
+                </div>
+                
                 <table class="layui-table week-table">
                     <colgroup>
                         <col width="5%">

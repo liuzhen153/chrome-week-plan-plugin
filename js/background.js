@@ -9,15 +9,25 @@ _a = 1
 _t = 0
 
 function check_alert() {
-    chrome.storage.sync.get({ allowAlert: 0 }, function(items) {
-    	allowAlert = items.allowAlert
+	chrome.storage.local.get({ isHistory: 0 }, function(items) {
+		// 如果是查看历史，则不提醒
+    	isHistory = items.isHistory
         if (allowAlert == 0) {
             return
         } else {
-            do_alert()
+            chrome.storage.local.get({ allowAlert: 0 }, function(items) {
+		    	allowAlert = items.allowAlert
+		        if (allowAlert == 0) {
+		            return
+		        } else {
+		            do_alert()
+		        }
+
+		    })
         }
 
     })
+    
 }
 
 // 日期列表
@@ -33,7 +43,7 @@ function getDates(_d) {
 // 执行弹窗
 function do_alert() {
 	ret = []
-    chrome.storage.sync.get({ planData: {} }, function(items) {
+    chrome.storage.local.get({ planData: {} }, function(items) {
         var planData = items.planData
         $.each(planData, function(index, value) {
         	v_time = value['time']

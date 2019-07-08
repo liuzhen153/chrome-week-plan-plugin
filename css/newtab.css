@@ -51,7 +51,7 @@
 .big-stone {
     /*background: #f2f2f2;*/
     padding: 10px;
-    height: 150px;
+    height: 180px;
     overflow-x: hidden;
     overflow-y: auto;
 }
@@ -59,7 +59,7 @@
 .normal-tools {
     /*background: #f2f2f2;*/
     padding: 10px;
-    height: 150px;
+    height: 180px;
     overflow-x: hidden;
     overflow-y: auto;
 }
@@ -229,3 +229,4 @@
 *::-webkit-scrollbar {
     display: none;
 }
+

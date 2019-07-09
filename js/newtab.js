@@ -141,7 +141,7 @@ $(function() {
 
         }
 
-        var bigStoneAlert, _alert_index, view_list_index, loop_plan_index
+        var bigStoneAlert, _alert_index, view_list_index, loop_plan_index, _edit_plan_index
 
 
         function is_empty_dict(obj) {
@@ -317,15 +317,16 @@ $(function() {
         })
 
 
-        // 如果这项计划已完成，则清除
+        // 修改计划状态，如果这项计划已完成，则清除
         $('body').on('click', '.plan-check', function() {
+            var _this = $(this)
             chrome.storage.local.get({ isHistory: 0 }, function(items) {
                 var isHistory = items.isHistory
                 if (isHistory != 0) {
                     layer.msg("正在展示历史计划，此功能不可用！")
                     return false
                 } else {
-                    var _this = $(this)
+                    
                     console.log(_this.hasClass('layui-icon-circle'))
 
                     // 完成操作
@@ -379,6 +380,67 @@ $(function() {
 
         })
 
+        // 编辑计划
+        $('body').on('click', '.plan-edit-btn', function() {
+            var _this = $(this)
+            chrome.storage.local.get({ isHistory: 0 }, function(items) {
+                var isHistory = items.isHistory
+                if (isHistory != 0) {
+                    layer.msg("正在展示历史计划，此功能不可用！")
+                    return false
+                } else {
+                    
+
+                    // 修改plan
+                    chrome.storage.local.get({ planData: {} }, function(items) {
+                        _card = _this.parent().parent('.layui-card')
+                        // console.log(_card)
+                        data_plan = _card.attr('data-plan')
+                        data_plan_week = _card.attr('data-parent-index')
+                        data_plan_index = _card.attr('data-index')
+                        _title = _card.attr('data-alert-title')
+                        var planData = items.planData
+                        this_p = planData[data_plan]['date_plan'][data_plan_week][data_plan_index]
+                        console.log(this_p)
+                        checked_big_stone_1 = ''
+                        checked_big_stone_2 = ''
+                        checked_time_q_1 = ''
+                        checked_time_q_2 = ''
+                        checked_time_q_3 = ''
+                        checked_time_q_4 = ''
+                        if(this_p['big_stone'] == 0){
+                            checked_big_stone_2 = 'checked'
+                        } else {
+                            checked_big_stone_1 = 'checked'
+                        }
+
+                        if(this_p['time_q'] == 1){
+                            checked_time_q_1 = 'checked'
+                        } else if(this_p['time_q'] == 2){
+                            checked_time_q_2 = 'checked'
+                        } else if(this_p['time_q'] == 3){
+                            checked_time_q_3 = 'checked'
+                        } else if(this_p['time_q'] == 4){
+                            checked_time_q_4 = 'checked'
+                        }
+                         
+                        _edit_plan_index = layer.open({
+                            area: ['600px', '600px'],
+                            title: '修改 - ' + _title,
+                            content: '<div class="layui-form" action=""><div class="layui-form-item"><label class="layui-form-label">简要名称</label><div class="layui-input-block"><input type="text" name="title" required="" lay-verify="required" value="' + this_p['title'] + '" placeholder="请输入标题" autocomplete="off" class="layui-input" /></div></div><div class="layui-form-item"><label class="layui-form-label">大石头</label><div class="layui-input-block"><input class="radio-normal" type="radio" name="big_stone" value="1" style="display:inline-block;" '+ checked_big_stone_1  +' /> 是<input class="radio-normal" type="radio" name="big_stone" value="0" style="display:inline-block;" '+ checked_big_stone_2  +'/> 否</div></div><div class="layui-form-item"><label class="layui-form-label">所属象限</label><div class="layui-input-block"><input class="radio-normal" type="radio" name="time_q" value="1" style="display:inline-block;"  '+ checked_time_q_1  +' /> Q1<input class="radio-normal" type="radio" name="time_q" value="2" style="display:inline-block;"  '+ checked_time_q_2  +'/> Q2<input class="radio-normal" type="radio" name="time_q" value="3" style="display:inline-block;"  '+ checked_time_q_3  +'/> Q3<input class="radio-normal" type="radio" name="time_q" value="4" style="display:inline-block;"  '+ checked_time_q_4  +'/> Q4</div></div><input type="hidden" name="data_plan" value="'+ data_plan +'"/><input type="hidden" name="data_plan_week" value="'+ data_plan_week +'"/><input type="hidden" name="data_plan_index" value="'+ data_plan_index +'"/><div class="layui-form-item layui-form-text"><label class="layui-form-label">详细内容</label><div class="layui-input-block"><textarea name="desc" placeholder="请输入内容" class="layui-textarea">' + this_p['desc'] + '</textarea></div></div><div class="layui-form-item"><div class="layui-input-block"><button class="layui-btn" lay-submit="" lay-filter="editPlan">立即提交</button></div></div></div>',
+                            closeBtn: 0,
+                            shadeClose: true,
+                            btn: []
+                        });
+                    });
+
+                }
+
+            })
+
+
+        })
+
         //  计划提交存储
         form.on('submit(addPlan)', function(data) {
             chrome.storage.local.get({ isHistory: 0 }, function(items) {
@@ -389,14 +451,8 @@ $(function() {
                 } else {
                     console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
                     _data = data.field
-                    // console.log(_data)
-                    // time_q = 1
-                    // if (_data.hasOwnProperty('time_q')) {
-                    //     time_q = _data['time_q']
-                    // }
                     item = { title: _data['title'], desc: _data['desc'], open: 1, big_stone: _data['big_stone'], time_q: _data['time_q'] }
                     console.log(item)
-                    // _this = $(this)
                     // // 修改plan
                     chrome.storage.local.get({ planData: {} }, function(items) {
                         data_plan = _data['data_plan']
@@ -406,7 +462,44 @@ $(function() {
                         console.log(planData[data_plan]['date_plan'])
                         planData[data_plan]['date_plan'][data_plan_week].push(item)
                         chrome.storage.local.set({ planData: planData }, function() {
-                            console.log('修改成功')
+                            console.log('添加新计划成功')
+                        });
+
+                        // 弹窗
+                        plan_alert(planData, data_plan, data_plan_week, _title)
+                        refresh()
+
+                    });
+                }
+
+            })
+
+        });
+
+
+        //  计划修改存储
+        form.on('submit(editPlan)', function(data) {
+            chrome.storage.local.get({ isHistory: 0 }, function(items) {
+                var isHistory = items.isHistory
+                if (isHistory != 0) {
+                    layer.msg("正在展示历史计划，此功能不可用！")
+                    return false
+                } else {
+                    console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+                    _data = data.field
+                    item = { title: _data['title'], desc: _data['desc'], open: 1, big_stone: _data['big_stone'], time_q: _data['time_q'] }
+                    console.log(item)
+
+                    // // 修改plan
+                    chrome.storage.local.get({ planData: {} }, function(items) {
+                        data_plan = _data['data_plan']
+                        data_plan_week = _data['data_plan_week']
+                        data_plan_index = _data['data_plan_index']
+                        var planData = items.planData
+                        console.log(planData[data_plan]['date_plan'])
+                        planData[data_plan]['date_plan'][data_plan_week][data_plan_index] = item
+                        chrome.storage.local.set({ planData: planData }, function() {
+                            console.log('修改计划成功')
                         });
 
                         // 弹窗
@@ -432,17 +525,17 @@ $(function() {
                 _count_close = 0
             $.each(_plan, function(index, value) {
                 _html += '<div class="layui-card" data-alert-title="' + _title + '" data-plan="' + data_plan + '" data-index="' + index + '" data-parent-index="' + data_plan_week
-                _html += '">    <div class="layui-card-header" style="color:#01AAED;font-weight:bold;cursor:pointer;" title="改变计划状态">'
+                _html += '">    <div class="layui-card-header" style="color:#01AAED;font-weight:bold;cursor:pointer;">'
 
                 if (value.open == 1) {
                     _count++
-                    _html += '<i class="plan-check layui-icon layui-icon-circle" style="font-size:20px;color: #FF5722;cursor:pointer;"></i> '
+                    _html += '<i class="plan-check layui-icon layui-icon-circle" style="font-size:20px;color: #FF5722;cursor:pointer;" title="改变计划状态"></i><i class="layui-icon layui-icon-edit plan-edit-btn" title="修改计划"></i> '
 
                 } else {
                     _count_close++
                     // _html_close += '<div class="layui-card" data-alert-title="' + _title + '" data-plan="' + data_plan + '" data-index="' + index + '" data-parent-index="' + data_plan_week
                     // _html_close += '">   <div class="layui-card-header" style="color:#01AAED;font-weight:bold;">'
-                    _html += '<i class="plan-check layui-icon layui-icon-ok-circle" style="font-size:20px;color: #FF5722;cursor:pointer;"></i>  '
+                    _html += '<i class="plan-check layui-icon layui-icon-ok-circle" style="font-size:20px;color: #FF5722;cursor:pointer;" title="改变计划状态"></i>  '
                     // _html_close += value.title + '</div> <div class="layui-card-body">       ' + value.desc + '</div></div>'
                 }
                 _html += value.title + '</div>  '

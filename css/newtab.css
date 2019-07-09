@@ -229,4 +229,10 @@
 *::-webkit-scrollbar {
     display: none;
 }
-
+.plan-edit-btn{
+    display: inline-block;
+    float: right;
+    font-size:20px;
+    color: #2F4056;
+    cursor:pointer;
+}

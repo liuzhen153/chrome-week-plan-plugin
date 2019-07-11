@@ -7,104 +7,155 @@
     <title>新标签页</title>
     <link rel="stylesheet" href="layui/css/layui.css">
     <link rel="stylesheet" href="./css/newtab.css">
+    <link rel="stylesheet" href="./css/dobetter.css">
 </head>
 
 <body>
     <!-- <div id="bg" class="bg BGBLUR" style="background-image: url(&quot;https://wallpaper.infinitynewtab.com/wallpaper/2710.jpg&quot;);"></div> -->
     <div class="layui-container" style="padding: 0 2vw;">
-        <div class="layui-row" style="width: 96vw;">
+        <div class="layui-row the-row" style="width: 96vw;">
             <div class="layui-col-md3 layui-col-lg3 normal-tools">
-                <div class="layui-tab layui-tab-brief" lay-filter="control" style="margin:0;">
-                  <ul class="layui-tab-title">
-                    <li class="layui-this">常用功能</li>
-                    <li>其他功能</li>
-                  </ul>
-                  <div class="layui-tab-content" style="padding: 0;">
-                    <div class="layui-tab-item layui-show">
-                        <div class="layui-card">
-                            <div class="layui-row">
-                                
-                                <div class="layui-col-xs4">
-                                    <div class="layui-card-header tools-title" id="v_time_q" style="cursor: pointer;">象限分布</div>
+                <div class="week-plan-box" style="display: none;">
+                    <div class="layui-tab layui-tab-brief" lay-filter="control" style="margin:0;">
+                        <ul class="layui-tab-title">
+                            <li class="layui-this">常用功能</li>
+                            <li>其他功能</li>
+                        </ul>
+                        <div class="layui-tab-content" style="padding: 0;">
+                            <div class="layui-tab-item layui-show">
+                                <div class="layui-card">
+                                    <div class="layui-row">
+                                        <div class="layui-col-xs4">
+                                            <div class="layui-card-header tools-title v_time_q" style="cursor: pointer;">象限分布</div>
+                                        </div>
+                                        <div class="layui-col-xs4">
+                                            <div class="layui-card-header tools-title" id="save_this" style="cursor: pointer;">保存本周</div>
+                                        </div>
+                                        <div class="layui-col-xs4">
+                                            <div class="layui-card-header tools-title" id="control_alert" style="cursor: pointer;"><span id="alert_text"></span>通知</div>
+                                        </div>
+                                        <div class="layui-col-xs4  tools-box">
+                                            <div class="layui-card-header tools-title" id="view_list" style="cursor: pointer;">查看历史</div>
+                                        </div>
+                                        <div class="layui-col-xs4  tools-box">
+                                            <div class="layui-card-header tools-title" id="refresh" style="cursor: pointer;">重置所有</div>
+                                        </div>
+                                        <div class="layui-col-xs4">
+                                            <div class="layui-card-header tools-title" id="loop_p" style="cursor: pointer;">周期计划</div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="layui-col-xs4">
-                                    <div class="layui-card-header tools-title" id="save_this" style="cursor: pointer;">保存本周</div>
+                            </div>
+                            <div class="layui-tab-item">
+                                <div class="layui-card">
+                                    <div class="layui-row">
+                                        <div class="layui-col-xs6">
+                                            <div class="layui-card-header tools-title" id="done_all" style="cursor: pointer;">全部完成</div>
+                                        </div>
+                                        <div class="layui-col-xs6">
+                                            <div class="layui-card-header tools-title" id="open_all" style="cursor: pointer;">全部开启</div>
+                                        </div>
+                                        <div class="layui-col-xs6">
+                                            <div class="layui-card-header tools-title" id="v_todo_list" style="cursor: pointer;">TODO List</div>
+                                        </div>
+                                        <div class="layui-col-xs6">
+                                            <div class="layui-card-header tools-title" id="export" style="cursor: pointer;">导出计划</div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="layui-col-xs4">
-                                    <div class="layui-card-header tools-title" id="control_alert" style="cursor: pointer;"><span id="alert_text"></span>通知</div>
-                                </div>
-                                <div class="layui-col-xs4  tools-box">
-                                    <div class="layui-card-header tools-title" id="view_list" style="cursor: pointer;">查看历史</div>
-                                </div>
-                                <div class="layui-col-xs4  tools-box">
-                                    <div class="layui-card-header tools-title" id="refresh" style="cursor: pointer;">重置所有</div>
-                                </div>
-                                <div class="layui-col-xs4">
-                                    <div class="layui-card-header tools-title" id="loop_p" style="cursor: pointer;">周期计划</div>
-                                </div>
-                               
                             </div>
                         </div>
                     </div>
-                    <div class="layui-tab-item">
-                        <div class="layui-card">
-                            <div class="layui-row">
-                                <div class="layui-col-xs6">
-                                    <div class="layui-card-header tools-title" id="done_all" style="cursor: pointer;">全部完成</div>
-                                </div>
-                                <div class="layui-col-xs6">
-                                    <div class="layui-card-header tools-title" id="open_all" style="cursor: pointer;">全部开启</div>
-                                </div>
-                                
-                                 <div class="layui-col-xs6">
-                                    <div class="layui-card-header tools-title" id="v_todo_list" style="cursor: pointer;">TODO List</div>
-                                </div>
-                                <div class="layui-col-xs6">
-                                    <div class="layui-card-header tools-title" id="export" style="cursor: pointer;">导出计划</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                  </div>
                 </div>
-                
+                <div class="do-better-box" style="display: none;">
+                    <div class="layui-row" style="background: #f2f2f2;">
+                        <div class="layui-col-xs6 do-better-l-box">
+                            <div class="do-better-l">
+                                <div class="do-better-i-box">
+                                    <div class="do-better-i-box-1" style="background: #FF5722;"><i class="layui-icon layui-icon-fire do-better-i"></i></div>
+                                    <div>今日</div>
+                                </div>
+                                <div class="do-better-t-box">
+                                    <div class="do-better-t-1" style="border-bottom: 1px solid #2F4056;" id="t-1-1"></div>
+                                    <div class="do-better-t-1" id="t-1-2"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-xs6 do-better-l-box">
+                            <div class="do-better-l">
+                                <div class="do-better-i-box">
+                                    <div class="do-better-i-box-1" style="background: #009688;"><i class="layui-icon layui-icon-list do-better-i"></i></div>
+                                    <div>本周</div>
+                                </div>
+                                <div class="do-better-t-box">
+                                    <div class="do-better-t-1" style="border-bottom: 1px solid #2F4056;" id="t-2-1"></div>
+                                    <div class="do-better-t-1" id="t-2-2"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-xs6 do-better-l-box">
+                            <div class="do-better-l">
+                                <div class="do-better-i-box">
+                                    <div class="do-better-i-box-1" style="background: #FFB800;"><i class="layui-icon layui-icon-flag do-better-i"></i></div>
+                                    <div style="position: relative;right: 8px;">大石头</div>
+                                </div>
+                                <div class="do-better-t-box">
+                                    <div class="do-better-t-1" style="border-bottom: 1px solid #2F4056;" id="t-3-1"></div>
+                                    <div class="do-better-t-1" id="t-3-2"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-xs6 do-better-l-box">
+                            <div class="do-better-l v_time_q">
+                                <div class="do-better-i-box">
+                                    <div class="do-better-i-box-1" style="background: #5FB878;"><i class="layui-icon layui-icon-theme do-better-i"></i></div>
+                                    <div class="" style="position: relative;right: 8px;">Q2象限</div>
+                                </div>
+                                <div class="do-better-t-box">
+                                    <div class="do-better-t-1" style="border-bottom: 1px solid #2F4056;" id="t-4-1"></div>
+                                    <div class="do-better-t-1" id="t-4-2"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            
-            <div class="layui-col-md6 layui-col-lg6">
+            <div class="layui-col-md6 layui-col-lg6" style="padding: 25px 10px 0 10px;">
                 <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
-                    <ul class="layui-tab-title">
-                        <li class="layui-this"><img src="http://img.baidu.com/img/logo-80px.gif" alt="Baidu" align="bottom" border="0"></li>
-                        <li><img src="https://www.google.com.hk/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png" height="30"></li>
-                    </ul>
-                    <div class="layui-tab-content">
-                        <div class="layui-tab-item layui-show search-tab-item">
-                            <form class="search-form" action="http://www.baidu.com/baidu" target="_blank">
-                                <input class="search-input" type=text name=word size=30 placeholder="输入并使用百度搜索..." autofocus="">
-                            </form>
-                        </div>
-                        <div class="layui-tab-item search-tab-item">
-                            <form action="http://www.google.com/search" name=f>
-                                <input class="search-input" maxLength=256 size=55 name=q value="" placeholder="输入并使用谷歌搜索...">
-                                <input type=hidden name=ie value="UTF-8">
-                                <input type=hidden name=oe value="UTF-8">
-                                <input name=hl type=hidden value=zh-CN>
-                            </form>
-                        </div>
+                    <form id="baidu" class="search-form" action="http://www.baidu.com/baidu" target="_blank" style="display: none;">
+                        <input class="search-input" type=text name=word size=30 placeholder="Do better, 成为一名高效能人士！" autofocus="">
+                    </form>
+                    <form id="google" action="http://www.google.com/search" name=f target="_blank" style="display: none;">
+                        <input class="search-input" maxLength=256 size=55 name=q value="" placeholder="输入并使用谷歌搜索...">
+                        <input type=hidden name=ie value="UTF-8">
+                        <input type=hidden name=oe value="UTF-8">
+                        <input name=hl type=hidden value=zh-CN>
+                    </form>
+                    <div class="layui-col-xs3">
+                        <div class="layui-card-header tools-title" id="switch_search_box" style="cursor: pointer;border-bottom: none;">切换成<span id="switch_search">谷歌</span></div>
+                    </div>
+                    <div class="layui-col-xs3">
+                        <div class="layui-card-header tools-title" id="switch_model_box" style="cursor: pointer;border-bottom: none;">切换到<span id="switch_model">Do Better</span></div>
                     </div>
                 </div>
             </div>
-            <div class="layui-col-md3 layui-col-lg3 big-stone">
-                <button type="button" class="layui-btn layui-btn-fluid" id="add_stone">本周大石头<i class="layui-icon layui-icon-release" style="display: inline-block;margin-left: 10px;"></i> </button>
-                <div id="big_stone_box"></div>
+            <div class="layui-col-md3 layui-col-lg3">
+                <div class="big-stone week-plan-box" style="display: none;">
+                    <button type="button" class="layui-btn layui-btn-fluid" id="add_stone">本周大石头<i class="layui-icon layui-icon-release" style="display: inline-block;margin-left: 10px;"></i> </button>
+                    <div id="big_stone_box"></div>
+                </div>
+                <div class="do-better-box today-plan-box" style="display: none;">
+                    <button type="button" class="layui-btn layui-btn-fluid" id="add_stone">今日计划<i class="layui-icon layui-icon-release" style="display: inline-block;margin-left: 10px;"></i> </button>
+                    <div id="today_plan"></div>
+                </div>
             </div>
         </div>
         <div class="layui-row" style="width: 96vw;">
-            <div class="layui-col-md12 week-plan">
-                <div class="col-xs-12" id="history-msg" style="color: #FFB800;display: none;">
-                        历史计划：<span id="history_list"></span>  <span id="go_back_this" style="color: #01AAED;cursor: pointer;display: inline-block;margin-left: 20px;">历史展示期间，通知将被屏蔽。返回本周>>></span>
-                        <hr class="layui-bg-orange">
+            <div class="layui-col-md12 week-plan week-plan-box" style="display: none;">
+                <div class="layui-col-xs-12" id="history-msg" style="color: #FFB800;display: none;">
+                    历史计划：<span id="history_list"></span> <span id="go_back_this" style="color: #01AAED;cursor: pointer;display: inline-block;margin-left: 20px;">历史展示期间，通知将被屏蔽。返回本周>>></span>
+                    <hr class="layui-bg-orange">
                 </div>
-                
                 <table class="layui-table week-table">
                     <colgroup>
                         <col width="5%">
@@ -119,20 +170,45 @@
                     </colgroup>
                     <thead>
                         <tr id="table_title">
-                            
                         </tr>
                     </thead>
                     <tbody id='tbody'>
                     </tbody>
                 </table>
             </div>
+            <div class="do-better-box" style="display: none;">
+                <div class="layui-row">
+                    <!-- <div class="layui-col-xs9">...</div> -->
+                    <div class="layui-col-xs12" style="padding-bottom: 20px;">
+                        <div class="layui-tab layui-tab-brief" lay-filter="tabHistoryBrief">
+                            <ul class="layui-tab-title">
+                                <li class="layui-this">标签页</li>
+                                <li>书签</li>
+                                <li>历史记录</li>
+                            </ul>
+                            <div class="layui-tab-content" style="min-height: 400px;">
+                                <div class="layui-tab-item layui-show">
+                                    <div id="do-better-tabs-box"></div>
+                                </div>
+                                <div class="layui-tab-item">
+                                    <div class="layui-col-xs6" id="bookmark1"></div>
+                                    <div class="layui-col-xs6" id="bookmark2"></div>
+                                </div>
+                                <div class="layui-tab-item">
+                                    <div id="do-better-history-box">
+                                    </div>
+                                </div>
 
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
     <script src="layui/layui.js"></script>
     <script src="js/jquery.js"></script>
     <script src="js/newtab.js"></script>
+    <script src="js/dobetter.js"></script>
 </body>
 
 </html>

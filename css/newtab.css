@@ -24,6 +24,9 @@
         background-size: 100vw 100vh;
         background-repeat:no-repeat;
     }*/
+body{
+    background: #f2f2f2;
+}
 .bg {
     position: absolute;
     z-index: 0;
@@ -46,12 +49,13 @@
 .layui-container {
     margin: 0;
     padding: 0;
+    background: #f2f2f2;
 }
 
 .big-stone {
     /*background: #f2f2f2;*/
     padding: 10px;
-    height: 180px;
+    /*height: 180px;*/
     overflow-x: hidden;
     overflow-y: auto;
 }
@@ -132,7 +136,7 @@
 }
 
 .layui-row {
-    background: rgba(255, 255, 255, 0.95);
+    background: #fff;
     border-radius: 10px;
 
 }
@@ -235,4 +239,7 @@
     font-size:20px;
     color: #2F4056;
     cursor:pointer;
+}
+.layui-tab{
+    background: #fff;
 }

@@ -300,7 +300,7 @@ $(function() {
 
 
         // 展示修改和删除
-        $('table').on('click', '.td-plan', function() {
+        $('body').on('click', '.td-plan', function() {
             data_plan_week = $(this).attr('date-week')
             date_time = $(this).parent('tr').attr('date-time')
             _title = data_plan_week + ' ' + date_time + ' 计划'
@@ -341,13 +341,19 @@ $(function() {
                             data_plan_week = _card.attr('data-parent-index')
                             data_plan_index = _card.attr('data-index')
                             _title = _card.attr('data-alert-title')
+                            _no_alert = _card.attr('data-alert-noalert')
                             var planData = items.planData
                             planData[data_plan]['date_plan'][data_plan_week][data_plan_index]['open'] = 0
                             // 修改状态
                             edit_planData(planData)
 
-                            // 弹窗
-                            plan_alert(planData, data_plan, data_plan_week, _title)
+                            if (typeof(_no_alert) == 'undefined') {
+                                // 弹窗
+                                plan_alert(planData, data_plan, data_plan_week, _title)
+                            } else {
+                                layer.msg('更新计划状态成功')
+                            }
+                            
                             refresh()
                         });
                     } else {
@@ -360,6 +366,7 @@ $(function() {
                             data_plan_week = _card.attr('data-parent-index')
                             data_plan_index = _card.attr('data-index')
                             _title = _card.attr('data-alert-title')
+                            _no_alert = _card.attr('data-alert-noalert')
                             var planData = items.planData
                             console.log(planData[data_plan]['date_plan'])
                             planData[data_plan]['date_plan'][data_plan_week][data_plan_index]['open'] = 1
@@ -367,7 +374,12 @@ $(function() {
                             // 修改状态
                             edit_planData(planData)
                             // 弹窗
-                            plan_alert(planData, data_plan, data_plan_week, _title)
+                            if (typeof(_no_alert) == 'undefined') {
+                                // 弹窗
+                                plan_alert(planData, data_plan, data_plan_week, _title)
+                            } else {
+                                layer.msg('更新计划状态成功')
+                            }
                             refresh()
 
 
@@ -670,7 +682,7 @@ $(function() {
 
 
         // 时间象限展示
-        $('#v_time_q').click(function() {
+        $('.v_time_q').click(function() {
             chrome.storage.local.get({ planData: {} }, function(items) {
                 var html_1 = '<ul>'
                 var html_2 = '<ul>'

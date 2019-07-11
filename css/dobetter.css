@@ -1,0 +1,101 @@
+.do-better-l-box {
+    padding: 5px;
+}
+
+.do-better-l {
+    background: #fff;
+    height: 70px;
+    border-radius: 10px;
+}
+.do-better-t-1{
+	text-align: center;
+}
+
+.colorf2f2f2 {
+    background: #f2f2f2;
+}
+
+.do-better-i {
+	display: block;
+    font-size: 18px;
+    color: #fff;
+}
+.do-better-i-box{
+	position: absolute;
+    left: 20%;
+    top: 18px;
+	color: #2F4056;
+}
+.do-better-i-box-1{
+	border-radius: 50%;
+	width: 25px;
+	height: 25px;
+	line-height: 20px;
+	text-align: center;
+	font-weight: bold;
+}
+.do-better-t-box{
+	position: absolute;
+    right: 20px;
+    top: 20px;
+	color: #2F4056;
+	font-size: 18px;
+}
+.do-better-tabs{
+	border-radius: 10px;
+	background: #f2f2f2;
+}
+.do-better-history{
+	border-radius: 10px;
+	background: #f2f2f2;
+}
+.do-better-title-text{
+	position: absolute;
+	left: 10px;
+	top: 5px;
+	color: #dddddd;
+}
+.tab-item-box{
+	padding: 0 10px;
+	/*min-height: 400px;*/
+}
+.tab-item{
+	/*width: 80%;*/
+	/*float: left;*/
+	/*margin-right: 10px;*/
+	/*padding-right: 15px;*/
+	white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-overflow: -o-ellipsis-lastline;
+}
+.color-green{
+	color: #01AAED;
+}
+.tab-close{
+	/*display: inline-block;*/
+	/*float: right;*/
+	position: absolute;
+	right: 20px;
+	top: 18px;
+	cursor: pointer;
+	
+}
+.tab-close-history{
+	margin-right: 10px;
+	
+}
+.tabs-icon{
+	width: 25px;
+	height: 25px;
+	margin-right: 10px;
+}
+.do-better-box{
+	padding: 10px;
+    
+}
+.today-plan-box{
+	max-height: 180px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}

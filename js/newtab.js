@@ -156,44 +156,14 @@ $(function() {
             console.log('查看本地数据')
             console.log(items.planData)
 
-            // 判断是否有值
-            chrome.storage.local.get({ isSync: 0 }, function(items_2) {
-                if (items_2.isSync == 0) {
-                    // 兼容以前，判断是否是存在云端的
-                    chrome.storage.sync.get({ planData: {} }, function(items_1) {
-                        // 兼容以前，判断是否是存在云端的
-                        console.log('查看云端')
-                        console.log(items_1.planData)
-                        if (is_empty_dict(items_1.planData)) {
-                            edit_planData(items_1.planData)
-                            // 清除云端数据
-                            chrome.storage.sync.clear(function() {
-                                chrome.storage.local.set({ isSync: 1 }, function() {
-                                    console.log('设置云端同步已完成')
-                                });
-                            });
-                        } else {
-                            if (is_empty_dict(items.planData)) {
-                                // 模拟数据
-                                edit_planData(_planData)
-                            }
-                        }
-                    });
-
-                } else {
-
-                    if (is_empty_dict(items.planData)) {
-                        // 模拟数据
-                        edit_planData(_planData)
-                    }
-                    console.log('先刷新一遍')
-                    console.log(_planData)
-                    // 先刷新一遍数据
-                    refresh()
-                }
-
-
-            });
+            if (is_empty_dict(items.planData)) {
+                // 模拟数据
+                edit_planData(_planData)
+            }
+            console.log('先刷新一遍')
+            console.log(_planData)
+            // 先刷新一遍数据
+            refresh()
 
         });
 
@@ -326,7 +296,7 @@ $(function() {
                     layer.msg("正在展示历史计划，此功能不可用！")
                     return false
                 } else {
-                    
+
                     console.log(_this.hasClass('layui-icon-circle'))
 
                     // 完成操作
@@ -353,7 +323,7 @@ $(function() {
                             } else {
                                 layer.msg('更新计划状态成功')
                             }
-                            
+
                             refresh()
                         });
                     } else {
@@ -401,7 +371,7 @@ $(function() {
                     layer.msg("正在展示历史计划，此功能不可用！")
                     return false
                 } else {
-                    
+
 
                     // 修改plan
                     chrome.storage.local.get({ planData: {} }, function(items) {
@@ -420,26 +390,26 @@ $(function() {
                         checked_time_q_2 = ''
                         checked_time_q_3 = ''
                         checked_time_q_4 = ''
-                        if(this_p['big_stone'] == 0){
+                        if (this_p['big_stone'] == 0) {
                             checked_big_stone_2 = 'checked'
                         } else {
                             checked_big_stone_1 = 'checked'
                         }
 
-                        if(this_p['time_q'] == 1){
+                        if (this_p['time_q'] == 1) {
                             checked_time_q_1 = 'checked'
-                        } else if(this_p['time_q'] == 2){
+                        } else if (this_p['time_q'] == 2) {
                             checked_time_q_2 = 'checked'
-                        } else if(this_p['time_q'] == 3){
+                        } else if (this_p['time_q'] == 3) {
                             checked_time_q_3 = 'checked'
-                        } else if(this_p['time_q'] == 4){
+                        } else if (this_p['time_q'] == 4) {
                             checked_time_q_4 = 'checked'
                         }
-                         
+
                         _edit_plan_index = layer.open({
                             area: ['600px', '600px'],
                             title: '修改 - ' + _title,
-                            content: '<div class="layui-form" action=""><div class="layui-form-item"><label class="layui-form-label">简要名称</label><div class="layui-input-block"><input type="text" name="title" required="" lay-verify="required" value="' + this_p['title'] + '" placeholder="请输入标题" autocomplete="off" class="layui-input" /></div></div><div class="layui-form-item"><label class="layui-form-label">大石头</label><div class="layui-input-block"><input class="radio-normal" type="radio" name="big_stone" value="1" style="display:inline-block;" '+ checked_big_stone_1  +' /> 是<input class="radio-normal" type="radio" name="big_stone" value="0" style="display:inline-block;" '+ checked_big_stone_2  +'/> 否</div></div><div class="layui-form-item"><label class="layui-form-label">所属象限</label><div class="layui-input-block"><input class="radio-normal" type="radio" name="time_q" value="1" style="display:inline-block;"  '+ checked_time_q_1  +' /> Q1<input class="radio-normal" type="radio" name="time_q" value="2" style="display:inline-block;"  '+ checked_time_q_2  +'/> Q2<input class="radio-normal" type="radio" name="time_q" value="3" style="display:inline-block;"  '+ checked_time_q_3  +'/> Q3<input class="radio-normal" type="radio" name="time_q" value="4" style="display:inline-block;"  '+ checked_time_q_4  +'/> Q4</div></div><input type="hidden" name="data_plan" value="'+ data_plan +'"/><input type="hidden" name="data_plan_week" value="'+ data_plan_week +'"/><input type="hidden" name="data_plan_index" value="'+ data_plan_index +'"/><div class="layui-form-item layui-form-text"><label class="layui-form-label">详细内容</label><div class="layui-input-block"><textarea name="desc" placeholder="请输入内容" class="layui-textarea">' + this_p['desc'] + '</textarea></div></div><div class="layui-form-item"><div class="layui-input-block"><button class="layui-btn" lay-submit="" lay-filter="editPlan">立即提交</button></div></div></div>',
+                            content: '<div class="layui-form" action=""><div class="layui-form-item"><label class="layui-form-label">简要名称</label><div class="layui-input-block"><input type="text" name="title" required="" lay-verify="required" value="' + this_p['title'] + '" placeholder="请输入标题" autocomplete="off" class="layui-input" /></div></div><div class="layui-form-item"><label class="layui-form-label">大石头</label><div class="layui-input-block"><input class="radio-normal" type="radio" name="big_stone" value="1" style="display:inline-block;" ' + checked_big_stone_1 + ' /> 是<input class="radio-normal" type="radio" name="big_stone" value="0" style="display:inline-block;" ' + checked_big_stone_2 + '/> 否</div></div><div class="layui-form-item"><label class="layui-form-label">所属象限</label><div class="layui-input-block"><input class="radio-normal" type="radio" name="time_q" value="1" style="display:inline-block;"  ' + checked_time_q_1 + ' /> Q1<input class="radio-normal" type="radio" name="time_q" value="2" style="display:inline-block;"  ' + checked_time_q_2 + '/> Q2<input class="radio-normal" type="radio" name="time_q" value="3" style="display:inline-block;"  ' + checked_time_q_3 + '/> Q3<input class="radio-normal" type="radio" name="time_q" value="4" style="display:inline-block;"  ' + checked_time_q_4 + '/> Q4</div></div><input type="hidden" name="data_plan" value="' + data_plan + '"/><input type="hidden" name="data_plan_week" value="' + data_plan_week + '"/><input type="hidden" name="data_plan_index" value="' + data_plan_index + '"/><div class="layui-form-item layui-form-text"><label class="layui-form-label">详细内容</label><div class="layui-input-block"><textarea name="desc" placeholder="请输入内容" class="layui-textarea">' + this_p['desc'] + '</textarea></div></div><div class="layui-form-item"><div class="layui-input-block"><button class="layui-btn" lay-submit="" lay-filter="editPlan">立即提交</button></div></div></div>',
                             closeBtn: 0,
                             shadeClose: true,
                             btn: []

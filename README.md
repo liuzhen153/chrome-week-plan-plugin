@@ -13,7 +13,13 @@
 # 效果示意
 
 ### 整体效果
-![示意](https://github.com/liuzhen153/chrome-week-plan-plugin/blob/master/img/screen.png)
+![周计划示意](https://github.com/liuzhen153/chrome-week-plan-plugin/blob/master/img/screen.png)
+
+![Do better 标签页](https://github.com/liuzhen153/chrome-week-plan-plugin/blob/master/img/tabs.png)
+
+![Do better 书签](https://github.com/liuzhen153/chrome-week-plan-plugin/blob/master/img/bookmarked.png)
+
+![Do better 历史记录](https://github.com/liuzhen153/chrome-week-plan-plugin/blob/master/img/history.png)
 
 ### 象限分布
 ![示意](https://github.com/liuzhen153/chrome-week-plan-plugin/blob/master/img/q4.png)

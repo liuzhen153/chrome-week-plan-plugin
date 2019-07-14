@@ -29,6 +29,9 @@
                                             <div class="layui-card-header tools-title v_time_q" style="cursor: pointer;">象限分布</div>
                                         </div>
                                         <div class="layui-col-xs4">
+                                            <div class="layui-card-header tools-title" id="v_todo_list" style="cursor: pointer;">TODO</div>
+                                        </div>
+                                        <div class="layui-col-xs4">
                                             <div class="layui-card-header tools-title" id="save_this" style="cursor: pointer;">保存本周</div>
                                         </div>
                                         <div class="layui-col-xs4">
@@ -39,9 +42,6 @@
                                         </div>
                                         <div class="layui-col-xs4  tools-box">
                                             <div class="layui-card-header tools-title" id="refresh" style="cursor: pointer;">重置所有</div>
-                                        </div>
-                                        <div class="layui-col-xs4">
-                                            <div class="layui-card-header tools-title" id="loop_p" style="cursor: pointer;">周期计划</div>
                                         </div>
                                     </div>
                                 </div>
@@ -56,7 +56,7 @@
                                             <div class="layui-card-header tools-title" id="open_all" style="cursor: pointer;">全部开启</div>
                                         </div>
                                         <div class="layui-col-xs6">
-                                            <div class="layui-card-header tools-title" id="v_todo_list" style="cursor: pointer;">TODO List</div>
+                                            <div class="layui-card-header tools-title" id="loop_p" style="cursor: pointer;">周期计划</div>
                                         </div>
                                         <div class="layui-col-xs6">
                                             <div class="layui-card-header tools-title" id="export" style="cursor: pointer;">导出计划</div>
@@ -182,33 +182,40 @@
                     <div class="layui-col-xs12" style="padding-bottom: 20px;">
                         <div class="layui-tab layui-tab-brief" lay-filter="tabHistoryBrief">
                             <ul class="layui-tab-title">
-                                <li class="layui-this">标签页</li>
-                                <li>书签</li>
+                                <li class="layui-this">标签页&书签</li>
+                                <!-- <li>书签</li> -->
                                 <li>历史记录</li>
                             </ul>
                             <div class="layui-tab-content" style="min-height: 400px;">
                                 <div class="layui-tab-item layui-show">
-                                    <div id="do-better-tabs-box"></div>
+                                    <div class="layui-row">
+                                        <div class="layui-col-xs3">
+                                            <div id="do-better-tabs-box"></div>
+                                        </div>
+                                        <div class="layui-col-xs9">
+                                            <div class="layui-col-xs6" id="bookmark1"></div>
+                                            <div class="layui-col-xs6" id="bookmark2"></div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="layui-tab-item">
+                                <!-- <div class="layui-tab-item">
                                     <div class="layui-col-xs6" id="bookmark1"></div>
                                     <div class="layui-col-xs6" id="bookmark2"></div>
-                                </div>
+                                </div> -->
                                 <div class="layui-tab-item">
                                     <div id="do-better-history-box">
                                     </div>
                                 </div>
-
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <script src="layui/layui.js"></script>
-    <script src="js/jquery.js"></script>
-    <script src="js/newtab.js"></script>
-    <script src="js/dobetter.js"></script>
+        <script src="layui/layui.js"></script>
+        <script src="js/jquery.js"></script>
+        <script src="js/newtab.js"></script>
+        <script src="js/dobetter.js"></script>
 </body>
 
 </html>

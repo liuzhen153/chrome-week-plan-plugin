@@ -5,10 +5,13 @@ $(function() {
             element = layui.element;
 
         // 日期列表
-        function getDates() {
+        function getDates(_type = "this_week") {
             var date_list = ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
             var new_Date = new Date()
             var timesStamp = new_Date.getTime();
+            if (_type == 'next_week') {
+                timesStamp = timesStamp + 24 * 60 * 60 * 1000 * 7
+            }
             var currenDay = new_Date.getDay();
             var dates = [];
             for (var i = 0; i < 7; i++) {
@@ -17,7 +20,19 @@ $(function() {
             return dates
         }
 
-        var date_list = getDates()
+        // 获取下周周一凌晨0点时间戳
+        function get_next_week_0() {
+            var new_Date = new Date()
+            var currenDay = new_Date.getDay();
+            var timesStamp = new_Date.getTime();
+            _t = new Date(timesStamp + 24 * 60 * 60 * 1000 * (7 - (currenDay + 6) % 7)).setHours(0, 0, 0, 0)
+            return _t
+        }
+        var date_list, date_list = [],
+            _planData, bigStoneAlert, _alert_index, view_list_index, loop_plan_index, _edit_plan_index
+
+
+
 
         // 设置表头
         function set_table_title(date_list) {
@@ -31,117 +46,127 @@ $(function() {
             })
             $('#table_title').append(_html)
         }
-        set_table_title(date_list)
 
-        // 添加起始数据
-        date_plan = {}
-        date_plan[date_list[0]] = []
-        date_plan[date_list[1]] = []
-        date_plan[date_list[2]] = []
-        date_plan[date_list[3]] = []
-        date_plan[date_list[4]] = []
-        date_plan[date_list[5]] = []
-        date_plan[date_list[6]] = []
-        var _planData = {
-            'time_100': {
-                date_time: '上午 5:00~6:00',
-                time: '6',
-                date_plan: date_plan
-            },
-            'time_101': {
-                date_time: '上午 6:00~7:00',
-                time: '7',
-                date_plan: date_plan
-            },
-            'time_102': {
-                date_time: '上午 7:00~8:00',
-                time: '8',
-                date_plan: date_plan
-            },
-            'time_103': {
-                date_time: '上午 8:00~9:00',
-                time: '9',
-                date_plan: date_plan
-            },
-            'time_104': {
-                date_time: '上午 9:00~10:00',
-                time: '10',
-                date_plan: date_plan
-            },
-            'time_105': {
-                date_time: '上午 10:00~11:00',
-                time: '11',
-                date_plan: date_plan
-            },
-            'time_106': {
-                date_time: '上午 11:00~12:00',
-                time: '<span style="color:#009688">中午</span>',
-                date_plan: date_plan
-            },
-            'time_107': {
-                date_time: '中午 12:00~13:00',
-                time: '13',
-                date_plan: date_plan
-            },
-            'time_108': {
-                date_time: '下午 13:00~14:00',
-                time: '14',
-                date_plan: date_plan
-            },
-            'time_109': {
-                date_time: '下午 14:00~15:00',
-                time: '15',
-                date_plan: date_plan
-            },
-            'time_110': {
-                date_time: '下午 15:00~16:00',
-                time: '16',
-                date_plan: date_plan
-            },
-            'time_111': {
-                date_time: '下午 16:00~17:00',
-                time: '17',
-                date_plan: date_plan
-            },
-            'time_112': {
-                date_time: '下午 17:00~18:00',
-                time: '<span style="color:#009688">晚上</span>',
-                date_plan: date_plan
-            },
-            'time_113': {
-                date_time: '下午 18:00~19:00',
-                time: '19',
-                date_plan: date_plan
-            },
-            'time_114': {
-                date_time: '晚上 19:00~20:00',
-                time: '20',
-                date_plan: date_plan
-            },
-            'time_115': {
-                date_time: '晚上 20:00~21:00',
-                time: '21',
-                date_plan: date_plan
-            },
-            'time_116': {
-                date_time: '晚上 21:00~22:00',
-                time: '22',
-                date_plan: date_plan
-            },
-            'time_117': {
-                date_time: '晚上 22:00~23:00',
-                time: '23',
-                date_plan: date_plan
-            },
-            'time_118': {
-                date_time: '晚上 23:00~24:00',
-                time: '24',
-                date_plan: date_plan
+
+        function get_date_list_planData(_type = "this_week") {
+            date_list = getDates()
+            if (_type == 'next_week') {
+                date_list_old = date_list
+                date_list = getDates(_type = _type)
             }
 
+            set_table_title(date_list)
+
+            // 添加起始数据
+            date_plan = {}
+            date_plan[date_list[0]] = []
+            date_plan[date_list[1]] = []
+            date_plan[date_list[2]] = []
+            date_plan[date_list[3]] = []
+            date_plan[date_list[4]] = []
+            date_plan[date_list[5]] = []
+            date_plan[date_list[6]] = []
+            _planData = {
+                'time_100': {
+                    date_time: '上午 5:00~6:00',
+                    time: '6',
+                    date_plan: date_plan
+                },
+                'time_101': {
+                    date_time: '上午 6:00~7:00',
+                    time: '7',
+                    date_plan: date_plan
+                },
+                'time_102': {
+                    date_time: '上午 7:00~8:00',
+                    time: '8',
+                    date_plan: date_plan
+                },
+                'time_103': {
+                    date_time: '上午 8:00~9:00',
+                    time: '9',
+                    date_plan: date_plan
+                },
+                'time_104': {
+                    date_time: '上午 9:00~10:00',
+                    time: '10',
+                    date_plan: date_plan
+                },
+                'time_105': {
+                    date_time: '上午 10:00~11:00',
+                    time: '11',
+                    date_plan: date_plan
+                },
+                'time_106': {
+                    date_time: '上午 11:00~12:00',
+                    time: '<span style="color:#009688">中午</span>',
+                    date_plan: date_plan
+                },
+                'time_107': {
+                    date_time: '中午 12:00~13:00',
+                    time: '13',
+                    date_plan: date_plan
+                },
+                'time_108': {
+                    date_time: '下午 13:00~14:00',
+                    time: '14',
+                    date_plan: date_plan
+                },
+                'time_109': {
+                    date_time: '下午 14:00~15:00',
+                    time: '15',
+                    date_plan: date_plan
+                },
+                'time_110': {
+                    date_time: '下午 15:00~16:00',
+                    time: '16',
+                    date_plan: date_plan
+                },
+                'time_111': {
+                    date_time: '下午 16:00~17:00',
+                    time: '17',
+                    date_plan: date_plan
+                },
+                'time_112': {
+                    date_time: '下午 17:00~18:00',
+                    time: '<span style="color:#009688">晚上</span>',
+                    date_plan: date_plan
+                },
+                'time_113': {
+                    date_time: '下午 18:00~19:00',
+                    time: '19',
+                    date_plan: date_plan
+                },
+                'time_114': {
+                    date_time: '晚上 19:00~20:00',
+                    time: '20',
+                    date_plan: date_plan
+                },
+                'time_115': {
+                    date_time: '晚上 20:00~21:00',
+                    time: '21',
+                    date_plan: date_plan
+                },
+                'time_116': {
+                    date_time: '晚上 21:00~22:00',
+                    time: '22',
+                    date_plan: date_plan
+                },
+                'time_117': {
+                    date_time: '晚上 22:00~23:00',
+                    time: '23',
+                    date_plan: date_plan
+                },
+                'time_118': {
+                    date_time: '晚上 23:00~24:00',
+                    time: '24',
+                    date_plan: date_plan
+                }
+
+            }
         }
 
-        var bigStoneAlert, _alert_index, view_list_index, loop_plan_index, _edit_plan_index
+
 
 
         function is_empty_dict(obj) {
@@ -151,21 +176,38 @@ $(function() {
             return false
         }
 
-        // 判断是否有值
-        chrome.storage.local.get({ planData: {} }, function(items) {
-            console.log('查看本地数据')
-            console.log(items.planData)
+        // 先刷新下日期和内容
+        chrome.storage.local.get({ isNextWeek: 0 }, function(items) {
 
-            if (is_empty_dict(items.planData)) {
-                // 模拟数据
-                edit_planData(_planData)
+            _now = parseInt((new Date()).getTime())
+            console.log(items.isNextWeek, _now)
+            if (items.isNextWeek > _now) {
+                console.log('下周')
+                get_date_list_planData('next_week')
+            } else {
+                // 如果不为0，则置为0
+                if (items.isNextWeek != 0) {
+                    chrome.storage.local.set({ isNextWeek: 0 }, function() {
+                        console.log('重置为本周成功')
+                    })
+                }
+                console.log('本周')
+                get_date_list_planData()
             }
-            console.log('先刷新一遍')
-            console.log(_planData)
-            // 先刷新一遍数据
-            refresh()
+            // 判断是否有值
+            chrome.storage.local.get({ planData: {} }, function(items) {
+                if (is_empty_dict(items.planData)) {
+                    // 模拟数据
+                    edit_planData(_planData)
+                }
+                // 先刷新一遍数据
+                refresh()
 
-        });
+            });
+        })
+
+
+
 
         // 数据修改后需要刷新数据
         function refresh() {
@@ -185,8 +227,6 @@ $(function() {
                 $('#big_stone_box').html('')
                 $('#tbody').html('')
                 var planData = items.planData
-                console.log('真正的数据')
-                console.log(planData)
                 $.each(planData, function(i, v) {
                     // console.log(i)
                     html = ''
@@ -313,6 +353,7 @@ $(function() {
                             _title = _card.attr('data-alert-title')
                             _no_alert = _card.attr('data-alert-noalert')
                             var planData = items.planData
+                            console.log(_no_alert)
                             planData[data_plan]['date_plan'][data_plan_week][data_plan_index]['open'] = 0
                             // 修改状态
                             edit_planData(planData)
@@ -320,11 +361,14 @@ $(function() {
                             if (typeof(_no_alert) == 'undefined') {
                                 // 弹窗
                                 plan_alert(planData, data_plan, data_plan_week, _title)
+
+                            } else if (_no_alert == 2) {
+                                todo_alert()
                             } else {
                                 layer.msg('更新计划状态成功')
                             }
-
                             refresh()
+
                         });
                     } else {
                         _this.removeClass('layui-icon-ok-circle').addClass('layui-icon-circle')
@@ -347,6 +391,9 @@ $(function() {
                             if (typeof(_no_alert) == 'undefined') {
                                 // 弹窗
                                 plan_alert(planData, data_plan, data_plan_week, _title)
+                                // refresh()
+                            } else if (_no_alert == 2) {
+                                todo_alert()
                             } else {
                                 layer.msg('更新计划状态成功')
                             }
@@ -555,29 +602,7 @@ $(function() {
 
         })
 
-        function do_refresh_now() {
-            layer.open({
-                content: '建议先保存再重置哦~',
-                closeBtn: 0,
-                btn: ['保存并重置', '直接重置', '取消'],
-                yes: function(index, layero) {
-                    save_this(_type = 1)
-                    layer.close(index)
-                    //按钮【按钮一】的回调
-                },
-                btn2: function(index, layero) {
-                    //按钮【按钮二】的回调
-                    edit_planData(_planData)
-                    refresh()
-                    //return false 开启该代码可禁止点击该按钮关闭
-                },
-                btn3: function(index, layero) {
-                    //按钮【按钮三】的回调
-                    // console.log('3')
-                    //return false 开启该代码可禁止点击该按钮关闭
-                }
-            });
-        }
+
 
         // 所有标注为完成
         function do_all(open, msg) {
@@ -742,19 +767,131 @@ $(function() {
         })
 
 
+        // 日期列表
+        function getDates_today() {
+            var date_list = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
+            var new_Date = new Date()
+            var timesStamp = new_Date.getTime();
+            var currenDay = new_Date.getDay();
+            var date = date_list[currenDay] + '(' + (new Date(timesStamp).toLocaleDateString().replace(/[年月]/g, '-').replace(/[日上下午]/g, '').substring(5)) + ')'
+            return date
+        }
 
         // todo list展示
         $('#v_todo_list').click(function() {
-            layer.msg('敬请期待')
-            // 显示桌面通知
-            // chrome.notifications.create(null, {
-            //     type: 'basic',
-            //     iconUrl: 'img/icon.png',
-            //     title: '这是标题',
-            //     message: '您刚才点击了自定义右键菜单！'
-            // });
+            // layer.msg('敬请期待')
+
+            todo_alert()
 
         })
+
+        function todo_alert() {
+            chrome.storage.local.get({ planData: {} }, function(items) {
+                var planData = items.planData
+                var date = getDates_today()
+                var _today = ''
+                var _total = ''
+                var _done = '',
+                    _nodone = '',
+                    _q1 = '',
+                    _q2 = '',
+                    _q3 = '',
+                    _q4 = '',
+                    item1 = '',
+                    item2 = ''
+                var today_total = 0,
+                    done_total = 0,
+                    week_total = 0,
+                    nodone_total = 0,
+                    q1_total = 0,
+                    q2_total = 0,
+                    q3_total = 0,
+                    q4_total = 0
+                $.each(planData, function(i, v) {
+                    $.each(v['date_plan'], function(idx, val) {
+
+                        if (val.length > 0) {
+                            $.each(val, function(index, value) {
+                                console.log(idx)
+                                week_total++
+                                data_plan = i
+                                data_plan_week = idx
+
+                                item1 = '<div class="layui-card" data-alert-title="修改计划状态" data-alert-noalert="2" data-plan="' + data_plan + '" data-index="' + index + '" data-parent-index="' + data_plan_week + '"><div class="layui-card-header today-plan" style="color:#01AAED;font-weight:bold;">'
+                                if (value['open'] == 0) {
+                                    item1 += '<i class="plan-check layui-icon layui-icon-ok-circle" style="color: #FF5722;"></i> '
+                                } else {
+                                    item1 += '<i class="plan-check layui-icon layui-icon-circle" style="font-size:20px;color: #FF5722;cursor:pointer;" title="改变计划状态"></i> '
+                                }
+                                item1 += value['title'] + '</div> '
+                                item1 += '</div>'
+
+
+                                item2 = '<div class="layui-card" data-alert-title="修改计划状态" data-alert-noalert="2" data-plan="' + data_plan + '" data-index="' + index + '" data-parent-index="' + data_plan_week + '"><div class="layui-card-header today-plan" style="color:#01AAED;font-weight:bold;">'
+                                if (value['open'] == 0) {
+                                    item2 += '<i class="plan-check layui-icon layui-icon-ok-circle" style="color: #FF5722;"></i> '
+                                } else {
+                                    item2 += '<i class="plan-check layui-icon layui-icon-circle" style="font-size:20px;color: #FF5722;cursor:pointer;" title="改变计划状态"></i> '
+                                }
+                                item2 += '<span class="layui-badge do-1 layui-bg-gray tab-close-history" style="background:#fff;">' + idx + '</span>' + value['title'] + '</div> '
+                                item2 += '</div>'
+
+
+                                if (idx == date) {
+                                    _today += item1
+                                    today_total++
+                                    // 开始分析当天数据
+                                } else {
+                                    _total += item2
+                                }
+                                if (value['open'] == 0) {
+                                    done_total++
+                                    _done += item2
+                                } else {
+                                    nodone_total++
+                                    _nodone += item2
+                                }
+
+                                if (value['time_q'] == 1) {
+                                    q1_total++
+                                    _q1 += item2
+                                }
+                                if (value['time_q'] == 2) {
+                                    q2_total++
+                                    _q2 += item2
+                                }
+                                if (value['time_q'] == 3) {
+                                    q3_total++
+                                    _q3 += item2
+                                }
+
+                                if (value['time_q'] == 4) {
+                                    q4_total++
+                                    _q4 += item2
+                                }
+
+
+                            })
+
+
+                        }
+
+
+                    })
+                })
+
+                var _h = '<div class="layui-tab layui-tab-brief" lay-filter="tabHistoryBrief"><ul class="layui-tab-title"><li class="layui-this">所有(' + week_total + ')</li><li>今日(' + today_total + ')</li><li>已完成(' + done_total + ')</li><li>未完成(' + nodone_total + ')</li><li>Q1象限(' + q1_total + ')</li><li>Q2象限(' + q2_total + ')</li><li>Q3象限(' + q3_total + ')</li><li>Q4象限(' + q4_total + ')</li></ul><div class="layui-tab-content" style="min-height: 400px;"><div class="layui-tab-item layui-show">            ' + _total + '</div><div class="layui-tab-item">            ' + _today + '</div><div class="layui-tab-item">             ' + _done + '</div><div class="layui-tab-item">             ' + _nodone + '</div><div class="layui-tab-item">             ' + _q1 + '</div><div class="layui-tab-item">             ' + _q2 + '</div><div class="layui-tab-item">             ' + _q3 + '</div><div class="layui-tab-item">             ' + _q4 + '</div></div></div>'
+
+                var doto_index = layer.open({
+                    area: ['800px', '600px'],
+                    title: 'TODO List',
+                    content: _h,
+                    closeBtn: 0,
+                    shadeClose: true,
+                    btn: []
+                });
+            })
+        }
 
         chrome.storage.local.get({ allowAlert: 0 }, function(items) {
             var text = ''
@@ -818,43 +955,104 @@ $(function() {
 
         })
 
-        // 保存本周
-        function save_this(_type = 0) {
-
-            layer.prompt({
-                formType: 0,
+        // 重置操作
+        function do_refresh_now() {
+            layer.open({
+                area: ['500px', '200px'],
+                content: '『开启下一周』会自动保存本周，其他操作建议先保存再重置哦~',
                 closeBtn: 0,
-                value: date_list[0] + '~' + date_list[date_list.length - 1],
-                title: '请输入周计划标题',
-                area: ['500px', '350px'] //自定义文本域宽高
-            }, function(value, index, elem) {
-                chrome.storage.local.get({ allPlanData: {} }, function(items) {
+                btn: ['开启下一周', '保存并重置', '直接重置', '取消'],
+                yes: function(index, layero) {
+                    chrome.storage.local.set({ isNextWeek: get_next_week_0() }, function() {
+                        console.log('开启下一周...')
 
-                    var allPlanData = items.allPlanData
-                    console.log(allPlanData)
-                    var titles = Object.keys(allPlanData)
-                    console.log(titles)
-                    chrome.storage.local.get({ planData: {} }, function(items) {
-                        var planData = items.planData
+                    });
+                    get_date_list_planData('next_week')
+                    save_this(_type = 1, 'old')
+                    layer.close(index)
+                    //按钮【按钮一】的回调
+                },
+                btn2: function(index, layero) {
+                    //按钮【按钮二】的回调
+                    get_date_list_planData()
+                    save_this(_type = 1)
+                    layer.close(index)
+                },
+                btn3: function(index, layero) {
+                    //按钮【按钮二】的回调
+                    edit_planData(_planData)
+                    refresh()
+                    //return false 开启该代码可禁止点击该按钮关闭
+                },
+                btn4: function(index, layero) {
+                    //按钮【按钮三】的回调
+                    // console.log('3')
+                    //return false 开启该代码可禁止点击该按钮关闭
+                }
+            });
+        }
+
+        // 保存本周
+        function save_this(_type = 0, date_list_chioce = 'new') {
+
+
+            chrome.storage.local.get({ allPlanData: {} }, function(items) {
+
+                var allPlanData = items.allPlanData
+                console.log(allPlanData)
+                var titles = Object.keys(allPlanData)
+                console.log(titles)
+                var theweek = 'plan_' + (10000 - (titles.length))
+                // date_list_chioce为OLD说明是下周
+                if (date_list_chioce == 'old') {
+                    _date_list = date_list_old
+
+                } else {
+                    _date_list = date_list
+                }
+
+                chrome.storage.local.get({ planData: {} }, function(items1) {
+                    var planData = items1.planData
+                    // 弹窗写周计划标题
+                    layer.prompt({
+                        formType: 0,
+                        closeBtn: 0,
+                        value: _date_list[0] + '~' + _date_list[_date_list.length - 1],
+                        title: '请输入周计划标题',
+                        area: ['500px', '350px'] //自定义文本域宽高
+                    }, function(value, index, elem) {
                         var item = {
                             'title': value,
                             'planData': planData
                         }
-
                         // 新增本周内容
-                        allPlanData['plan_' + (10000 - (titles.length))] = item
+                        allPlanData[theweek] = item
                         console.log(allPlanData)
+                        if (date_list_chioce == 'old') {
+                            // 如果是开启下一周，将本周数据保存在theweek里
+                            chrome.storage.local.set({ theweek: planData }, function() {
+                                setAllPlanData(allPlanData, _type)
+                            })
 
-                        setAllPlanData(allPlanData, _type)
+                        } else {
+                            setAllPlanData(allPlanData, _type)
+                        }
+
+
+
+
 
                         layer.close(index);
-                    })
+                    });
 
                 })
 
-            });
+            })
+
+
         }
 
+        // 历史记录被保存
         function setAllPlanData(allPlanData, _type) {
             // 更新历史记录
             chrome.storage.local.set({ allPlanData: allPlanData }, function() {

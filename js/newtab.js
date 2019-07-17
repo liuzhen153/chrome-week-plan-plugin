@@ -31,9 +31,9 @@ $(function() {
         var date_list, date_list = [],
             _planData, bigStoneAlert, _alert_index, view_list_index, loop_plan_index, _edit_plan_index
 
-        chrome.storage.local.getBytesInUse(function(r){
-            console.log(r)
-        })
+        // chrome.storage.local.getBytesInUse(function(r){
+        //     console.log(r)
+        // })
         
 
         // 设置表头

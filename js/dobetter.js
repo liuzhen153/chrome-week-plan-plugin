@@ -19,8 +19,8 @@ $(function() {
         // 先判断用户偏好
         switch_search()
         switch_model()
-      
-        
+
+
 
         function switch_search(_switch = 0) {
             // 判断是否有值
@@ -148,7 +148,6 @@ $(function() {
                                     $.each(val, function(index, value) {
                                         week_total++
                                         if (idx == date) {
-                                            console.log(val)
                                             // 开始分析当天数据
                                             today_total++
                                             data_plan = i
@@ -157,10 +156,10 @@ $(function() {
 
                                             _today = '<div class="layui-card" data-alert-title="修改计划状态" data-alert-noalert="1" data-plan="' + data_plan + '" data-index="' + index + '" data-parent-index="' + data_plan_week + '"><div class="layui-card-header today-plan" style="color:#01AAED;font-weight:bold;">'
                                             if (value['open'] == 0) {
-                                                _today += '<i class="plan-check layui-icon layui-icon-ok-circle" style="color: #FF5722;"></i> '
+                                                _today += '<i class="plan-check layui-icon layui-icon-ok-circle" style="color: #5FB878;"></i> '
                                                 today_done++
                                             } else {
-                                                _today += '<i class="plan-check layui-icon layui-icon-circle" style="font-size:20px;color: #FF5722;cursor:pointer;" title="改变计划状态"></i> '
+                                                _today += '<i class="plan-check layui-icon layui-icon-circle" style="font-size:20px;color: #5FB878;cursor:pointer;" title="改变计划状态"></i> '
                                             }
                                             _today += value['title'] + '</div> '
                                             _today += '</div>'
@@ -453,7 +452,6 @@ $(function() {
 
                         //Ajax 操作
                         var id = data.id; //得到节点索引
-                        console.log(id)
                         if (type === 'add') { //增加节点
                             //返回 key 值
                             console.log(elem);
@@ -537,10 +535,10 @@ $(function() {
         // 更新标签页
         function refresh_tabs() {
             $('#do-better-tabs-box').html('')
-            chrome.tabs.query({}, function(tabs) {
+            chrome.tabs.getAllInWindow(function(tabs) {
                 $.each(tabs, function(i, v) {
                     var _html = ''
-                    if (v['favIconUrl'] == '') {
+                    if (!v.hasOwnProperty('favIconUrl') || v['favIconUrl'] == '') {
                         v['favIconUrl'] = './img/icon.png'
                     }
                     // console.log(v)
@@ -551,6 +549,7 @@ $(function() {
                 })
 
                 console.log('更新标签页成功....')
+
             })
         }
 
@@ -650,37 +649,37 @@ $(function() {
 
 
         //tab页相关
-            chrome.tabs.onUpdated.addListener(function(tabId, changeInfo) {
-                if (changeInfo['status'] == "complete") {
-                    refresh_tabs()
-                }
-            });
-
-
-            // 标签页被关闭时
-            chrome.tabs.onRemoved.addListener(function(tab) {
+        chrome.tabs.onUpdated.addListener(function(tabId, changeInfo) {
+            if (changeInfo['status'] == "complete") {
                 refresh_tabs()
-            });
-
-            // 当标签页在窗口中移动时产生
-            chrome.tabs.onMoved.addListener(function(tabId, moveInfo) {
-                refresh_tabs()
-            });
-
-            // 当标签页由于预呈现或即搜即得而被另一个标签页替换时产生
-            chrome.tabs.onReplaced.addListener(function(addedTabId, removedTabId) {
-                refresh_tabs()
-            });
-            // 历史记录被删除时
-            chrome.history.onVisitRemoved.addListener(function() {
-                refresh_history()
-            })
+            }
+        });
 
 
-            // 新增历史记录时
-            chrome.history.onVisited.addListener(function() {
-                refresh_history()
-            })
+        // 标签页被关闭时
+        chrome.tabs.onRemoved.addListener(function(tab) {
+            refresh_tabs()
+        });
+
+        // 当标签页在窗口中移动时产生
+        chrome.tabs.onMoved.addListener(function(tabId, moveInfo) {
+            refresh_tabs()
+        });
+
+        // 当标签页由于预呈现或即搜即得而被另一个标签页替换时产生
+        chrome.tabs.onReplaced.addListener(function(addedTabId, removedTabId) {
+            refresh_tabs()
+        });
+        // 历史记录被删除时
+        chrome.history.onVisitRemoved.addListener(function() {
+            refresh_history()
+        })
+
+
+        // 新增历史记录时
+        chrome.history.onVisited.addListener(function() {
+            refresh_history()
+        })
 
 
         // 美化时间
@@ -692,7 +691,7 @@ $(function() {
             }
         }
 
-        
+
 
 
     });

@@ -31,8 +31,10 @@ $(function() {
         var date_list, date_list = [],
             _planData, bigStoneAlert, _alert_index, view_list_index, loop_plan_index, _edit_plan_index
 
-
-
+        chrome.storage.local.getBytesInUse(function(r){
+            console.log(r)
+        })
+        
 
         // 设置表头
         function set_table_title(date_list) {
@@ -180,7 +182,6 @@ $(function() {
         chrome.storage.local.get({ isNextWeek: 0 }, function(items) {
 
             _now = parseInt((new Date()).getTime())
-            console.log(items.isNextWeek, _now)
             if (items.isNextWeek > _now) {
                 console.log('下周')
                 get_date_list_planData('next_week')
@@ -191,7 +192,6 @@ $(function() {
                         console.log('重置为本周成功')
                     })
                 }
-                console.log('本周')
                 get_date_list_planData()
             }
             // 判断是否有值
@@ -243,13 +243,14 @@ $(function() {
                             // 只有开启状态才展示
                             if (val['open'] == 1) {
 
-                                title += '<li><span class="layui-badge-dot layui-bg-orange"></span> ' + val['title'] + '<li/>'
+                                title += '<li><span class="layui-badge-dot layui-bg-orange"></span><i data-index="' + idx + '" class="plan-check-1 layui-icon layui-icon-circle" style="color: #FFB800;display:none;"></i> ' + val['title'] 
+                                title += ' <i data-alert-title="编辑 - ' + val['title'] + '" data-index="' + idx + '" class="layui-icon layui-icon-edit plan-edit-btn-1" title="修改计划" style="color: #FFB800;display:none;"></i><li/>'
                             }
                             if (val['big_stone'] == 1) {
                                 big_stone_count++
                                 var html_ = '<div class="layui-card"><div class="layui-card-header" style="color:#01AAED;font-weight:bold;">'
                                 if (val['open'] == 0) {
-                                    html_ += '<i class="layui-icon layui-icon-ok-circle" style="color: #FF5722;"></i>'
+                                    html_ += '<i class="layui-icon layui-icon-ok-circle" style="color: #5FB878;"></i>'
                                 }
                                 html_ += val['title'] + '</div> '
                                 // html_ += '<div class="layui-card-body">' + val['desc'] + '   </div>'
@@ -260,13 +261,13 @@ $(function() {
 
                             if (val['open'] == 0) {
                                 // 大石头也展示
-                                title += '<li><i class="layui-icon layui-icon-ok-circle" '
+                                title += '<li><i data-index="' + idx + '" data-done="1" class="plan-check-1 layui-icon layui-icon-ok-circle" '
                                 if (val['big_stone'] == 1) {
                                     title += 'style="color: #fff;font-size:18px;"'
                                 } else {
                                     title += 'style="color: #5FB878;font-size:18px;"'
                                 }
-                                title += '></i> ' + val['title'] + '<li/>'
+                                title += '></i> ' + val['title'] + ' <i data-alert-title="' + val['title'] + '" data-index="' + idx + '" class="layui-icon layui-icon-edit plan-edit-btn-1" title="修改计划" style="color: #FFB800;display:none;"></i><li/>'
                             }
                         })
                         title += '</ul>'
@@ -293,6 +294,8 @@ $(function() {
 
             });
         }
+
+
 
 
 
@@ -326,9 +329,53 @@ $(function() {
 
         })
 
+        // 直接hover即可修改状态
+        $('body').on('mouseover', '.td-plan  li', function() {
+            var _this = $(this)
+            var _plan_check_1 = _this.children('.plan-check-1')
+            if (typeof(_plan_check_1.attr('data-done')) == 'undefined') {
+                $(this).children('.plan-check-1').show()
+                
+                $(this).children('span').hide()
+            }
+
+            // 修改plan
+            chrome.storage.local.get({ planData: {} }, function(items) {
+                _card = _plan_check_1.parent().parent().parent('.td-plan')
+                data_plan = _card.attr('data-plan')
+                data_plan_week = _card.attr('date-week')
+                data_plan_index = _plan_check_1.attr('data-index')
+
+                var planData = items.planData
+                _desc = '没有详细描述'
+                if (planData[data_plan]['date_plan'][data_plan_week][data_plan_index]['desc'] != '') {
+                    _desc = planData[data_plan]['date_plan'][data_plan_week][data_plan_index]['desc']
+                }
+                layer.tips(_desc, _this, {
+                  tips: 1
+                });
+            });
+
+            
+
+            $(this).children('.plan-edit-btn-1').show()
+
+        })
+
+        // 移除hover恢复模样
+        $('body').on('mouseout', '.td-plan  li', function() {
+            if (typeof($(this).children('.plan-check-1').attr('data-done')) == 'undefined') {
+                $(this).children('.plan-check-1').hide()
+                $(this).children('span').show()
+            }
+
+            $(this).children('.plan-edit-btn-1').hide()
+
+        })
 
         // 修改计划状态，如果这项计划已完成，则清除
-        $('body').on('click', '.plan-check', function() {
+        $('body').on('click', '.plan-check-1', function(e) {
+            e.stopPropagation();
             var _this = $(this)
             chrome.storage.local.get({ isHistory: 0 }, function(items) {
                 var isHistory = items.isHistory
@@ -346,6 +393,135 @@ $(function() {
 
                         // 修改plan
                         chrome.storage.local.get({ planData: {} }, function(items) {
+                            _card = _this.parent().parent().parent('.td-plan')
+                            data_plan = _card.attr('data-plan')
+                            data_plan_week = _card.attr('date-week')
+                            data_plan_index = _this.attr('data-index')
+
+                            var planData = items.planData
+                            planData[data_plan]['date_plan'][data_plan_week][data_plan_index]['open'] = 0
+                            // 修改状态
+                            edit_planData(planData)
+
+
+                            refresh()
+
+                        });
+                    } else {
+                        _this.removeClass('layui-icon-ok-circle').addClass('layui-icon-circle')
+
+                        // 修改plan
+                        chrome.storage.local.get({ planData: {} }, function(items) {
+                            _card = _this.parent().parent().parent('.td-plan')
+                            data_plan = _card.attr('data-plan')
+                            data_plan_week = _card.attr('date-week')
+                            data_plan_index = _this.attr('data-index')
+
+                            var planData = items.planData
+                            planData[data_plan]['date_plan'][data_plan_week][data_plan_index]['open'] = 1
+                            // 修改状态
+                            edit_planData(planData)
+
+
+                            refresh()
+
+
+                        });
+                    }
+                }
+
+            })
+
+
+        })
+
+
+        // 编辑计划
+        $('body').on('click', '.plan-edit-btn-1', function(e) {
+            e.stopPropagation()
+            var _this = $(this)
+            chrome.storage.local.get({ isHistory: 0 }, function(items) {
+                var isHistory = items.isHistory
+                if (isHistory != 0) {
+                    layer.msg("正在展示历史计划，此功能不可用！")
+                    return false
+                } else {
+
+
+                    // 修改plan
+                    chrome.storage.local.get({ planData: {} }, function(items) {
+                        _card = _this.parent().parent().parent('.td-plan')
+                        data_plan = _card.attr('data-plan')
+                        data_plan_week = _card.attr('date-week')
+                        data_plan_index = _this.attr('data-index')
+                        _title = _this.attr('data-alert-title')
+
+
+  
+                        var planData = items.planData
+                        console.log(data_plan,data_plan_week,data_plan_index,_title,planData)
+                        var this_p = planData[data_plan]['date_plan'][data_plan_week][data_plan_index]
+                        console.log(this_p)
+                        // return
+                        checked_big_stone_1 = ''
+                        checked_big_stone_2 = ''
+                        checked_time_q_1 = ''
+                        checked_time_q_2 = ''
+                        checked_time_q_3 = ''
+                        checked_time_q_4 = ''
+                        if (this_p['big_stone'] == 0) {
+                            checked_big_stone_2 = 'checked'
+                        } else {
+                            checked_big_stone_1 = 'checked'
+                        }
+
+                        if (this_p['time_q'] == 1) {
+                            checked_time_q_1 = 'checked'
+                        } else if (this_p['time_q'] == 2) {
+                            checked_time_q_2 = 'checked'
+                        } else if (this_p['time_q'] == 3) {
+                            checked_time_q_3 = 'checked'
+                        } else if (this_p['time_q'] == 4) {
+                            checked_time_q_4 = 'checked'
+                        }
+
+                        _edit_plan_index = layer.open({
+                            area: ['600px', '600px'],
+                            title: '修改 - ' + _title,
+                            content: '<div class="layui-form" action=""><div class="layui-form-item"><label class="layui-form-label">简要名称</label><div class="layui-input-block"><input type="text" name="title" required="" lay-verify="required" value="' + this_p['title'] + '" placeholder="请输入标题" autocomplete="off" class="layui-input" /></div></div><div class="layui-form-item"><label class="layui-form-label">大石头</label><div class="layui-input-block"><input class="radio-normal" type="radio" name="big_stone" value="1" style="display:inline-block;" ' + checked_big_stone_1 + ' /> 是<input class="radio-normal" type="radio" name="big_stone" value="0" style="display:inline-block;" ' + checked_big_stone_2 + '/> 否</div></div><div class="layui-form-item"><label class="layui-form-label">所属象限</label><div class="layui-input-block"><input class="radio-normal" type="radio" name="time_q" value="1" style="display:inline-block;"  ' + checked_time_q_1 + ' /> Q1<input class="radio-normal" type="radio" name="time_q" value="2" style="display:inline-block;"  ' + checked_time_q_2 + '/> Q2<input class="radio-normal" type="radio" name="time_q" value="3" style="display:inline-block;"  ' + checked_time_q_3 + '/> Q3<input class="radio-normal" type="radio" name="time_q" value="4" style="display:inline-block;"  ' + checked_time_q_4 + '/> Q4</div></div><input type="hidden" name="data_plan" value="' + data_plan + '"/><input type="hidden" name="data_plan_week" value="' + data_plan_week + '"/><input type="hidden" name="data_plan_index" value="' + data_plan_index + '"/><input type="hidden" name="open" value="' + this_p['open'] + '" /><div class="layui-form-item layui-form-text"><label class="layui-form-label">详细内容</label><div class="layui-input-block"><textarea name="desc" placeholder="请输入内容" class="layui-textarea">' + this_p['desc'] + '</textarea></div></div><div class="layui-form-item"><div class="layui-input-block"><button class="layui-btn" lay-submit="" lay-filter="editPlan">立即提交</button></div></div></div>',
+                            closeBtn: 0,
+                            shadeClose: true,
+                            btn: []
+                        });
+                    });
+
+                }
+
+            })
+
+
+        })
+
+
+
+        // 修改计划状态，如果这项计划已完成，则清除
+        $('body').on('click', '.plan-check', function() {
+            var _this = $(this)
+            chrome.storage.local.get({ isHistory: 0 }, function(items) {
+                var isHistory = items.isHistory
+                if (isHistory != 0) {
+                    layer.msg("正在展示历史计划，此功能不可用！")
+                    return false
+                } else {
+
+
+                    // 完成操作
+                    if (_this.hasClass('layui-icon-circle')) {
+                        // check
+                        _this.removeClass('layui-icon-circle').addClass('layui-icon-ok-circle')
+
+                        // 修改plan
+                        chrome.storage.local.get({ planData: {} }, function(items) {
                             _card = _this.parent().parent('.layui-card')
                             data_plan = _card.attr('data-plan')
                             data_plan_week = _card.attr('data-parent-index')
@@ -353,7 +529,6 @@ $(function() {
                             _title = _card.attr('data-alert-title')
                             _no_alert = _card.attr('data-alert-noalert')
                             var planData = items.planData
-                            console.log(_no_alert)
                             planData[data_plan]['date_plan'][data_plan_week][data_plan_index]['open'] = 0
                             // 修改状态
                             edit_planData(planData)
@@ -382,7 +557,6 @@ $(function() {
                             _title = _card.attr('data-alert-title')
                             _no_alert = _card.attr('data-alert-noalert')
                             var planData = items.planData
-                            console.log(planData[data_plan]['date_plan'])
                             planData[data_plan]['date_plan'][data_plan_week][data_plan_index]['open'] = 1
 
                             // 修改状态
@@ -429,7 +603,7 @@ $(function() {
                         data_plan_index = _card.attr('data-index')
                         _title = _card.attr('data-alert-title')
                         var planData = items.planData
-                        this_p = planData[data_plan]['date_plan'][data_plan_week][data_plan_index]
+                        var this_p = planData[data_plan]['date_plan'][data_plan_week][data_plan_index]
                         console.log(this_p)
                         checked_big_stone_1 = ''
                         checked_big_stone_2 = ''
@@ -456,7 +630,7 @@ $(function() {
                         _edit_plan_index = layer.open({
                             area: ['600px', '600px'],
                             title: '修改 - ' + _title,
-                            content: '<div class="layui-form" action=""><div class="layui-form-item"><label class="layui-form-label">简要名称</label><div class="layui-input-block"><input type="text" name="title" required="" lay-verify="required" value="' + this_p['title'] + '" placeholder="请输入标题" autocomplete="off" class="layui-input" /></div></div><div class="layui-form-item"><label class="layui-form-label">大石头</label><div class="layui-input-block"><input class="radio-normal" type="radio" name="big_stone" value="1" style="display:inline-block;" ' + checked_big_stone_1 + ' /> 是<input class="radio-normal" type="radio" name="big_stone" value="0" style="display:inline-block;" ' + checked_big_stone_2 + '/> 否</div></div><div class="layui-form-item"><label class="layui-form-label">所属象限</label><div class="layui-input-block"><input class="radio-normal" type="radio" name="time_q" value="1" style="display:inline-block;"  ' + checked_time_q_1 + ' /> Q1<input class="radio-normal" type="radio" name="time_q" value="2" style="display:inline-block;"  ' + checked_time_q_2 + '/> Q2<input class="radio-normal" type="radio" name="time_q" value="3" style="display:inline-block;"  ' + checked_time_q_3 + '/> Q3<input class="radio-normal" type="radio" name="time_q" value="4" style="display:inline-block;"  ' + checked_time_q_4 + '/> Q4</div></div><input type="hidden" name="data_plan" value="' + data_plan + '"/><input type="hidden" name="data_plan_week" value="' + data_plan_week + '"/><input type="hidden" name="data_plan_index" value="' + data_plan_index + '"/><div class="layui-form-item layui-form-text"><label class="layui-form-label">详细内容</label><div class="layui-input-block"><textarea name="desc" placeholder="请输入内容" class="layui-textarea">' + this_p['desc'] + '</textarea></div></div><div class="layui-form-item"><div class="layui-input-block"><button class="layui-btn" lay-submit="" lay-filter="editPlan">立即提交</button></div></div></div>',
+                            content: '<div class="layui-form" action=""><div class="layui-form-item"><label class="layui-form-label">简要名称</label><div class="layui-input-block"><input type="text" name="title" required="" lay-verify="required" value="' + this_p['title'] + '" placeholder="请输入标题" autocomplete="off" class="layui-input" /></div></div><div class="layui-form-item"><label class="layui-form-label">大石头</label><div class="layui-input-block"><input class="radio-normal" type="radio" name="big_stone" value="1" style="display:inline-block;" ' + checked_big_stone_1 + ' /> 是<input class="radio-normal" type="radio" name="big_stone" value="0" style="display:inline-block;" ' + checked_big_stone_2 + '/> 否</div></div><div class="layui-form-item"><label class="layui-form-label">所属象限</label><div class="layui-input-block"><input class="radio-normal" type="radio" name="time_q" value="1" style="display:inline-block;"  ' + checked_time_q_1 + ' /> Q1<input class="radio-normal" type="radio" name="time_q" value="2" style="display:inline-block;"  ' + checked_time_q_2 + '/> Q2<input class="radio-normal" type="radio" name="time_q" value="3" style="display:inline-block;"  ' + checked_time_q_3 + '/> Q3<input class="radio-normal" type="radio" name="time_q" value="4" style="display:inline-block;"  ' + checked_time_q_4 + '/> Q4</div></div><input type="hidden" name="data_plan" value="' + data_plan + '"/><input type="hidden" name="data_plan_week" value="' + data_plan_week + '"/><input type="hidden" name="data_plan_index" value="' + data_plan_index + '"/><input type="hidden" name="open" value="' + this_p['open'] + '" /><div class="layui-form-item layui-form-text"><label class="layui-form-label">详细内容</label><div class="layui-input-block"><textarea name="desc" placeholder="请输入内容" class="layui-textarea">' + this_p['desc'] + '</textarea></div></div><div class="layui-form-item"><div class="layui-input-block"><button class="layui-btn" lay-submit="" lay-filter="editPlan">立即提交</button></div></div></div>',
                             closeBtn: 0,
                             shadeClose: true,
                             btn: []
@@ -480,6 +654,7 @@ $(function() {
                 } else {
                     console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
                     _data = data.field
+                    console.log('lll',_data)
                     item = { title: _data['title'], desc: _data['desc'], open: 1, big_stone: _data['big_stone'], time_q: _data['time_q'] }
                     console.log(item)
                     // // 修改plan
@@ -516,7 +691,7 @@ $(function() {
                 } else {
                     console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
                     _data = data.field
-                    item = { title: _data['title'], desc: _data['desc'], open: 1, big_stone: _data['big_stone'], time_q: _data['time_q'] }
+                    item = { title: _data['title'], desc: _data['desc'], open: parseInt(_data['open']), big_stone: _data['big_stone'], time_q: _data['time_q'] }
                     console.log(item)
 
                     // // 修改plan
@@ -532,7 +707,8 @@ $(function() {
                         });
 
                         // 弹窗
-                        plan_alert(planData, data_plan, data_plan_week, _title)
+                        // plan_alert(planData, data_plan, data_plan_week, _title)
+                        layer.close(_edit_plan_index)
                         refresh()
 
                     });
@@ -577,7 +753,7 @@ $(function() {
             _alert_index = layer.open({
                 area: ['600px', '600px'],
                 title: _title,
-                content: '<div class="layui-tab layui-tab-brief" style="margin:0;" lay-filter="planTabBrief"><ul class="layui-tab-title"><li class="layui-this" style="cursor:pointer;">计划列表 ' + _count_close + '/' + parseInt(_count + _count_close) + '</li><li style="cursor:pointer;">新增计划</li></ul><div class="layui-tab-content"><div class="layui-tab-item layui-show">            ' + _html + '</div><div class="layui-tab-item"><div class="layui-form" action=""><div class="layui-form-item"><label class="layui-form-label">简要名称</label><div class="layui-input-block"><input type="text" name="title" required="" lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input" /></div></div><div class="layui-form-item"><label class="layui-form-label">大石头</label><div class="layui-input-block"><input class="radio-normal" type="radio" name="big_stone" value="1" style="display:inline-block;" /> 是<input class="radio-normal" type="radio" name="big_stone" value="0" style="display:inline-block;" checked="" /> 否</div><input type="hidden" name="data_plan_week" value="' + data_plan_week + '" /><input type="hidden" name="data_plan" value="' + data_plan + '" /><input type="hidden" name="_title" value="' + _title + '" /></div><div class="layui-form-item"><label class="layui-form-label">所属象限</label><div class="layui-input-block"><input class="radio-normal" type="radio" name="time_q" value="1" style="display:inline-block;" checked /> Q1<input class="radio-normal" type="radio" name="time_q" value="2" style="display:inline-block;"/> Q2<input class="radio-normal" type="radio" name="time_q" value="3" style="display:inline-block;" /> Q3<input class="radio-normal" type="radio" name="time_q" value="4" style="display:inline-block;" /> Q4</div></div><div class="layui-form-item layui-form-text"><label class="layui-form-label">详细内容</label><div class="layui-input-block"><textarea name="desc" placeholder="请输入内容" class="layui-textarea"></textarea></div></div><div class="layui-form-item"><div class="layui-input-block"><button class="layui-btn" lay-submit="" lay-filter="addPlan">立即提交</button></div></div></div></div></div></div>',
+                content: '<div class="layui-tab layui-tab-brief" style="margin:0;" lay-filter="planTabBrief"><ul class="layui-tab-title"><li class="layui-this" style="cursor:pointer;">新增计划</li><li style="cursor:pointer;">计划列表 ' + _count_close + '/' + parseInt(_count + _count_close) + '</li></ul><div class="layui-tab-content"><div class="layui-tab-item layui-show"><div class="layui-form" action=""><div class="layui-form-item"><label class="layui-form-label">简要名称</label><div class="layui-input-block"><input type="text" name="title" required="" lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input" /></div></div><div class="layui-form-item"><label class="layui-form-label">大石头</label><div class="layui-input-block"><input class="radio-normal" type="radio" name="big_stone" value="1" style="display:inline-block;" /> 是<input class="radio-normal" type="radio" name="big_stone" value="0" style="display:inline-block;" checked="" /> 否</div><input type="hidden" name="data_plan_week" value="' + data_plan_week + '" /><input type="hidden" name="data_plan" value="' + data_plan + '" /><input type="hidden" name="_title" value="' + _title + '" /></div><div class="layui-form-item"><label class="layui-form-label">所属象限</label><div class="layui-input-block"><input class="radio-normal" type="radio" name="time_q" value="1" style="display:inline-block;" checked="" /> Q1<input class="radio-normal" type="radio" name="time_q" value="2" style="display:inline-block;" /> Q2<input class="radio-normal" type="radio" name="time_q" value="3" style="display:inline-block;" /> Q3<input class="radio-normal" type="radio" name="time_q" value="4" style="display:inline-block;" /> Q4</div></div><div class="layui-form-item layui-form-text"><label class="layui-form-label">详细内容</label><div class="layui-input-block"><textarea name="desc" placeholder="请输入内容" class="layui-textarea"></textarea></div></div><div class="layui-form-item"><div class="layui-input-block"><button class="layui-btn" lay-submit="" lay-filter="addPlan">立即提交</button></div></div></div></div><div class="layui-tab-item">      ' + _html + '</div></div></div>',
                 closeBtn: 0,
                 shadeClose: true,
                 btn: []
